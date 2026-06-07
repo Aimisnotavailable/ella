@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌷 The Secret Garden — Happy Birthday</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="garden-page">
+    <!-- Gate access check -->
+    <script>
+        if (!sessionStorage.getItem('gardenUnlocked')) {
+            window.location.href = 'gate.html';
+        }
+    </script>
+
+    <div class="garden-sky"></div>
+    <div class="garden-hills">
+        <div class="hill hill-back"></div>
+        <div class="hill hill-mid"></div>
+        <div class="hill hill-front"></div>
+    </div>
+
+    <div class="fireflies-container" id="firefliesContainer" aria-hidden="true"></div>
+
+    <div class="garden-flowers" id="gardenFlowers">
+        <button class="flower flower-1" data-flower="0" data-name="Rose" aria-label="Clickable Rose">🌹</button>
+        <button class="flower flower-2" data-flower="1" data-name="Sunflower" aria-label="Clickable Sunflower">🌻</button>
+        <button class="flower flower-3" data-flower="2" data-name="Tulip" aria-label="Clickable Tulip">🌷</button>
+        <button class="flower flower-4" data-flower="3" data-name="Cherry Blossom" aria-label="Clickable Cherry Blossom">🌸</button>
+        <button class="flower flower-5" data-flower="4" data-name="Bouquet" aria-label="Clickable Bouquet">💐</button>
+        <button class="flower flower-6" data-flower="5" data-name="Hibiscus" aria-label="Clickable Hibiscus">🌺</button>
+        <button class="flower flower-special" data-flower="special" data-name="The Prophecy" aria-label="Special Prophecy Flower">
+            <span class="special-flower-icon">🔮</span>
+            <span class="special-flower-label">The Prophecy</span>
+        </button>
+    </div>
+
+    <div class="floating-text" id="floatingText"></div>
+
+    <!-- Lyric Portrait Overlay (CSS background-clip text) -->
+    <div class="portrait-overlay" id="portraitOverlay">
+        <button class="portrait-close-btn" id="portraitCloseBtn" aria-label="Close portrait">✕</button>
+        <div class="portrait-text-block" id="portraitTextBlock">
+            <!-- Lyrics will be injected here by garden.js -->
+        </div>
+        <p class="portrait-song-label" id="portraitSongLabel"></p>
+    </div>
+
+    <audio id="gardenAudio" preload="none"></audio>
+
+    <!-- Case Closed Easter Egg -->
+    <div class="case-closed-overlay" id="caseClosedOverlay">
+        <div class="case-closed-card">
+            <h2>🔍 Case Closed!</h2>
+            <p>
+                You've explored every corner of the garden,<br />
+                solved every clue, and found the melody within.<br /><br />
+                <strong>Happy Birthday, dear detective.</strong><br />
+                May your year bloom with joy,<br />
+                mystery, and music. 🌷🎵
+            </p>
+            <button class="btn-case-file" id="caseClosedDismissBtn">💖 Thank You</button>
+        </div>
+    </div>
+
+    <script src="js/garden.js"></script>
+</body>
+</html>
