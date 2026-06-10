@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🔐 The Sealed Garden — Decode the Melody</title>
+    <title>Gate — Decode the Melody</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body class="gate-page">
@@ -14,52 +14,29 @@
                 <div class="candle-wick"></div>
                 <div class="candle-body"></div>
             </div>
-
             <div class="case-note">
                 <div class="note-paper">
                     <div class="note-stamp">TOP SECRET</div>
-                    <p class="note-text">
-                        <strong>Case File #0042</strong><br /><br />
-                        The garden is sealed behind an iron gate.<br />
-                        To enter, you must decode the melody<br />
-                        hidden within the static.<br /><br />
-                        <em>Press the button below. Listen.</em><br />
-                        <em>Then type what you hear.</em>
-                    </p>
+                    <p class="note-text"><strong>Case File #0042</strong><br><br>The garden is sealed behind an iron gate.<br>Decode the melody hidden in the static.<br><br><em>Listen, then type the word.</em></p>
                     <div class="note-inkblot"></div>
                 </div>
             </div>
-
             <div class="morse-controls">
-                <button id="playMorseBtn" class="btn-morse-play" title="Play Morse Code">
-                    🔊 Play the Signal
-                </button>
+                <button id="playMorseBtn" class="btn-morse-play">Play the Signal</button>
                 <span class="morse-status" id="morseStatus"></span>
             </div>
-
             <div class="input-group">
-                <input
-                    type="text"
-                    id="passwordInput"
-                    class="password-input"
-                    placeholder="Type the decoded word..."
-                    autocomplete="off"
-                    spellcheck="false"
-                />
-                <button id="submitBtn" class="btn-submit">🔓 Unlock the Gate</button>
+                <input type="text" id="passwordInput" class="password-input" placeholder="Decoded word..." autocomplete="off">
+                <button id="submitBtn" class="btn-submit">Unlock Gate</button>
             </div>
-
             <p class="hint-message" id="hintMessage"></p>
-
             <div class="gate-visual">
                 <div class="gate-left"></div>
+                <div class="gate-lock"></div>
                 <div class="gate-right"></div>
-                <div class="gate-lock" id="gateLock">🔒</div>
-                <div class="gate-vines"></div>
             </div>
         </div>
     </div>
-
     <script src="js/morse.js"></script>
 </body>
 </html>
