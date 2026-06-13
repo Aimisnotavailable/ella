@@ -1,27 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Dear Reader's Garden</title>
 
     <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
         href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Lora:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&display=swap"
         rel="stylesheet"
-    >
+    />
 
-    <!-- Stylesheet -->
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-
     <!-- ==================== HIDDEN SVG DEFS ==================== -->
     <svg class="svg-defs" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
         <defs>
-            <!-- Full spider lily -->
             <g id="spider-lily-full">
                 <path d="M50 270 Q48 190 50 110" stroke="#6B9E6B" stroke-width="2.8" fill="none" stroke-linecap="round"/>
                 <circle cx="50" cy="108" r="6" fill="#C41E3A" opacity="0.75"/>
@@ -34,17 +31,12 @@
                     <path d="M50 108 Q70 122 86 142 Q94 150 86 158"/>
                 </g>
                 <g stroke="#C41E3A" stroke-width="1.3" fill="none" stroke-linecap="round">
-                    <path d="M50 108 Q42 48 35 24"/>
-                    <circle cx="35" cy="24" r="2.6" fill="#E8A0A8"/>
-                    <path d="M50 108 Q58 48 65 24"/>
-                    <circle cx="65" cy="24" r="2.6" fill="#E8A0A8"/>
-                    <path d="M50 108 Q18 84 5 64"/>
-                    <circle cx="5" cy="64" r="2.6" fill="#E8A0A8"/>
-                    <path d="M50 108 Q82 84 95 64"/>
-                    <circle cx="95" cy="64" r="2.6" fill="#E8A0A8"/>
+                    <path d="M50 108 Q42 48 35 24"/><circle cx="35" cy="24" r="2.6" fill="#E8A0A8"/>
+                    <path d="M50 108 Q58 48 65 24"/><circle cx="65" cy="24" r="2.6" fill="#E8A0A8"/>
+                    <path d="M50 108 Q18 84 5 64"/><circle cx="5" cy="64" r="2.6" fill="#E8A0A8"/>
+                    <path d="M50 108 Q82 84 95 64"/><circle cx="95" cy="64" r="2.6" fill="#E8A0A8"/>
                 </g>
             </g>
-            <!-- Bud -->
             <g id="spider-lily-bud">
                 <path d="M30 190 Q28 130 30 80" stroke="#6B9E6B" stroke-width="2.4" fill="none" stroke-linecap="round"/>
                 <ellipse cx="30" cy="78" rx="5.5" ry="14" fill="#C41E3A" opacity="0.8"/>
@@ -53,7 +45,6 @@
                 <circle cx="35" cy="46" r="1.8" fill="#E8A0A8"/>
                 <circle cx="24" cy="48" r="1.8" fill="#E8A0A8"/>
             </g>
-            <!-- Side view -->
             <g id="spider-lily-side">
                 <path d="M38 250 Q36 170 38 100" stroke="#6B9E6B" stroke-width="2.6" fill="none" stroke-linecap="round"/>
                 <ellipse cx="38" cy="98" rx="4.5" ry="7" fill="#C41E3A" opacity="0.7"/>
@@ -65,19 +56,15 @@
                     <path d="M38 98 Q52 82 68 88 Q78 92 74 104"/>
                 </g>
                 <g stroke="#C41E3A" stroke-width="1.1" fill="none" stroke-linecap="round">
-                    <path d="M38 98 Q18 68 6 42"/>
-                    <circle cx="6" cy="42" r="2.2" fill="#E8A0A8"/>
-                    <path d="M38 98 Q56 68 72 42"/>
-                    <circle cx="72" cy="42" r="2.2" fill="#E8A0A8"/>
+                    <path d="M38 98 Q18 68 6 42"/><circle cx="6" cy="42" r="2.2" fill="#E8A0A8"/>
+                    <path d="M38 98 Q56 68 72 42"/><circle cx="72" cy="42" r="2.2" fill="#E8A0A8"/>
                 </g>
             </g>
-            <!-- Single petal for falling -->
             <g id="spider-lily-petal">
                 <path d="M14 0 Q18 -12 14 -26 Q10 -36 14 -42 Q18 -36 14 -26 Q10 -12 14 0Z" fill="#C41E3A" opacity="0.85" stroke="#9B1A2E" stroke-width="0.7"/>
                 <path d="M14 -42 Q12 -52 13 -56" stroke="#C41E3A" stroke-width="0.9" fill="none" stroke-linecap="round"/>
                 <circle cx="13" cy="-56" r="1.4" fill="#E8A0A8"/>
             </g>
-            <!-- Sparkle -->
             <g id="sparkle">
                 <path d="M10 0 Q11 8 18 10 Q11 12 10 20 Q9 12 2 10 Q9 8 10 0Z" fill="#E6C27A" opacity="0.8"/>
             </g>
@@ -138,27 +125,23 @@
         <div class="sparkle" style="top:35%;left:4%;animation-delay:2.4s;"><svg width="12" height="12"><use href="#sparkle"/></svg></div>
 
         <div class="hero__lily hero__lily--left" id="heroLilyLeft" aria-hidden="true">
-            <svg viewBox="0 0 120 260" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;">
+            <svg viewBox="0 0 120 260" class="swaying-lily" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;">
                 <path d="M60 250 Q58 180 60 130" stroke="#6B9E6B" stroke-width="2.5" fill="none" stroke-linecap="round"/>
                 <g class="hero-lily-petal" style="--hl-origin-x:60px;--hl-origin-y:130px;--hl-rotate:-50deg;">
                     <path d="M60 130 Q48 100 36 74 Q30 58 40 46" stroke="#C41E3A" stroke-width="2.4" fill="none" stroke-linecap="round"/>
-                    <path d="M40 46 Q36 34 38 28" stroke="#C41E3A" stroke-width="1" fill="none" stroke-linecap="round"/>
-                    <circle cx="38" cy="28" r="2.2" fill="#E8A0A8"/>
+                    <path d="M40 46 Q36 34 38 28" stroke="#C41E3A" stroke-width="1" fill="none" stroke-linecap="round"/><circle cx="38" cy="28" r="2.2" fill="#E8A0A8"/>
                 </g>
                 <g class="hero-lily-petal" style="--hl-origin-x:60px;--hl-origin-y:130px;--hl-rotate:50deg;">
                     <path d="M60 130 Q72 100 84 74 Q90 58 80 46" stroke="#C41E3A" stroke-width="2.4" fill="none" stroke-linecap="round"/>
-                    <path d="M80 46 Q84 34 82 28" stroke="#C41E3A" stroke-width="1" fill="none" stroke-linecap="round"/>
-                    <circle cx="82" cy="28" r="2.2" fill="#E8A0A8"/>
+                    <path d="M80 46 Q84 34 82 28" stroke="#C41E3A" stroke-width="1" fill="none" stroke-linecap="round"/><circle cx="82" cy="28" r="2.2" fill="#E8A0A8"/>
                 </g>
                 <g class="hero-lily-petal" style="--hl-origin-x:60px;--hl-origin-y:130px;--hl-rotate:-95deg;">
                     <path d="M60 130 Q38 118 22 98 Q14 84 20 70" stroke="#C41E3A" stroke-width="2.4" fill="none" stroke-linecap="round"/>
-                    <path d="M20 70 Q16 58 14 52" stroke="#C41E3A" stroke-width="1" fill="none" stroke-linecap="round"/>
-                    <circle cx="14" cy="52" r="2.2" fill="#E8A0A8"/>
+                    <path d="M20 70 Q16 58 14 52" stroke="#C41E3A" stroke-width="1" fill="none" stroke-linecap="round"/><circle cx="14" cy="52" r="2.2" fill="#E8A0A8"/>
                 </g>
                 <g class="hero-lily-petal" style="--hl-origin-x:60px;--hl-origin-y:130px;--hl-rotate:95deg;">
                     <path d="M60 130 Q82 118 98 98 Q106 84 100 70" stroke="#C41E3A" stroke-width="2.4" fill="none" stroke-linecap="round"/>
-                    <path d="M100 70 Q104 58 106 52" stroke="#C41E3A" stroke-width="1" fill="none" stroke-linecap="round"/>
-                    <circle cx="106" cy="52" r="2.2" fill="#E8A0A8"/>
+                    <path d="M100 70 Q104 58 106 52" stroke="#C41E3A" stroke-width="1" fill="none" stroke-linecap="round"/><circle cx="106" cy="52" r="2.2" fill="#E8A0A8"/>
                 </g>
                 <g class="hero-lily-petal" style="--hl-origin-x:60px;--hl-origin-y:130px;--hl-rotate:-22deg;">
                     <path d="M60 130 Q54 104 48 80 Q44 64 52 52" stroke="#C41E3A" stroke-width="2.1" fill="none" stroke-linecap="round"/>
@@ -171,31 +154,25 @@
             </svg>
         </div>
         <div class="hero__lily hero__lily--right" id="heroLilyRight" aria-hidden="true">
-            <svg viewBox="0 0 100 220" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;">
+            <svg viewBox="0 0 100 220" class="swaying-lily" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;">
                 <path d="M50 210 Q48 150 50 110" stroke="#6B9E6B" stroke-width="2.3" fill="none" stroke-linecap="round"/>
                 <g class="hero-lily-petal" style="--hl-origin-x:50px;--hl-origin-y:110px;--hl-rotate:-45deg;">
-                    <path d="M50 110 Q40 84 30 60 Q24 46 34 36" stroke="#C41E3A" stroke-width="2.2" fill="none" stroke-linecap="round"/>
-                    <circle cx="34" cy="36" r="2" fill="#E8A0A8"/>
+                    <path d="M50 110 Q40 84 30 60 Q24 46 34 36" stroke="#C41E3A" stroke-width="2.2" fill="none" stroke-linecap="round"/><circle cx="34" cy="36" r="2" fill="#E8A0A8"/>
                 </g>
                 <g class="hero-lily-petal" style="--hl-origin-x:50px;--hl-origin-y:110px;--hl-rotate:45deg;">
-                    <path d="M50 110 Q60 84 70 60 Q76 46 66 36" stroke="#C41E3A" stroke-width="2.2" fill="none" stroke-linecap="round"/>
-                    <circle cx="66" cy="36" r="2" fill="#E8A0A8"/>
+                    <path d="M50 110 Q60 84 70 60 Q76 46 66 36" stroke="#C41E3A" stroke-width="2.2" fill="none" stroke-linecap="round"/><circle cx="66" cy="36" r="2" fill="#E8A0A8"/>
                 </g>
                 <g class="hero-lily-petal" style="--hl-origin-x:50px;--hl-origin-y:110px;--hl-rotate:-85deg;">
-                    <path d="M50 110 Q30 98 16 82 Q8 70 14 58" stroke="#C41E3A" stroke-width="2.2" fill="none" stroke-linecap="round"/>
-                    <circle cx="14" cy="58" r="2" fill="#E8A0A8"/>
+                    <path d="M50 110 Q30 98 16 82 Q8 70 14 58" stroke="#C41E3A" stroke-width="2.2" fill="none" stroke-linecap="round"/><circle cx="14" cy="58" r="2" fill="#E8A0A8"/>
                 </g>
                 <g class="hero-lily-petal" style="--hl-origin-x:50px;--hl-origin-y:110px;--hl-rotate:85deg;">
-                    <path d="M50 110 Q70 98 84 82 Q92 70 86 58" stroke="#C41E3A" stroke-width="2.2" fill="none" stroke-linecap="round"/>
-                    <circle cx="86" cy="58" r="2" fill="#E8A0A8"/>
+                    <path d="M50 110 Q70 98 84 82 Q92 70 86 58" stroke="#C41E3A" stroke-width="2.2" fill="none" stroke-linecap="round"/><circle cx="86" cy="58" r="2" fill="#E8A0A8"/>
                 </g>
                 <g class="hero-lily-petal" style="--hl-origin-x:50px;--hl-origin-y:110px;--hl-rotate:-18deg;">
-                    <path d="M50 110 Q45 88 40 68 Q36 54 44 44" stroke="#C41E3A" stroke-width="2" fill="none" stroke-linecap="round"/>
-                    <circle cx="44" cy="44" r="1.7" fill="#E8A0A8"/>
+                    <path d="M50 110 Q45 88 40 68 Q36 54 44 44" stroke="#C41E3A" stroke-width="2" fill="none" stroke-linecap="round"/><circle cx="44" cy="44" r="1.7" fill="#E8A0A8"/>
                 </g>
                 <g class="hero-lily-petal" style="--hl-origin-x:50px;--hl-origin-y:110px;--hl-rotate:18deg;">
-                    <path d="M50 110 Q55 88 60 68 Q64 54 56 44" stroke="#C41E3A" stroke-width="2" fill="none" stroke-linecap="round"/>
-                    <circle cx="56" cy="44" r="1.7" fill="#E8A0A8"/>
+                    <path d="M50 110 Q55 88 60 68 Q64 54 56 44" stroke="#C41E3A" stroke-width="2" fill="none" stroke-linecap="round"/><circle cx="56" cy="44" r="1.7" fill="#E8A0A8"/>
                 </g>
             </svg>
         </div>
@@ -204,172 +181,62 @@
             <p class="hero__subtitle">🌸 Made with love, for</p>
             <h1 class="hero__title" id="friendName">Alice</h1>
             <p class="hero__message">
-                The rest of the page is <em>her</em> world.<br>
+                The rest of the page is <em>her</em> world.<br />
                 A garden of petals, pages, and songs that feel like home.
             </p>
             <p class="hero__birthday" id="heroBirthday">Happy Birthday, Alice! May your garden always bloom. 🌸</p>
         </div>
-        <div class="hero__scroll-hint" onclick="document.getElementById('book-garden').scrollIntoView({behavior:'smooth'})" title="Scroll down">
+        <div class="hero__scroll-hint" onclick="document.getElementById('album-garden').scrollIntoView({behavior:'smooth'})" title="Scroll down">
             <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
         </div>
     </section>
 
-    <!-- ==================== HER BOOK GARDEN ==================== -->
-    <section class="section book-garden reveal" id="book-garden">
+    <!-- ==================== ALBUM GARDEN ==================== -->
+    <section class="section album-garden reveal" id="album-garden">
         <div class="section__inner">
-            <h2 class="section__heading">Her Book Garden</h2>
-            <p class="section__subheading">Stories she carries close to her heart</p>
-            <div class="section__divider">
-                <span class="section__divider-line"></span>
-                <svg viewBox="0 0 28 40"><use href="#spider-lily-bud"/></svg>
-                <span class="section__divider-line"></span>
-            </div>
-
-            <div class="book-garden__shelf">
-                <div class="book book--1" data-message="You are the kind of friend who makes ordinary days feel like poetry.">
-                    <div class="book__spine-detail"></div>
-                    <div class="book__spine-line" style="top:18%;"></div>
-                    <div class="book__spine-line" style="top:45%;"></div>
-                    <div class="book__spine-line" style="top:72%;"></div>
-                    <div class="book__vine">
-                        <svg viewBox="0 0 120 230">
-                            <path class="vine-stem" d="M30 210 Q50 180 70 150 T90 100 T70 40 Q60 20 50 30 Q40 40 55 70 T45 120 Q35 140 25 120"/>
-                            <ellipse class="vine-leaf" cx="70" cy="90" rx="7.5" ry="3.5" transform="rotate(-20,70,90)"/>
-                            <ellipse class="vine-leaf" cx="55" cy="60" rx="6.5" ry="3" transform="rotate(30,55,60)"/>
-                            <circle class="vine-bud" cx="45" cy="120" r="3.5"/>
-                        </svg>
-                    </div>
-                </div>
-                <div class="book book--2" data-message="Every page you turn, you leave a little more magic in the world.">
-                    <div class="book__spine-detail"></div>
-                    <div class="book__spine-line" style="top:15%;"></div>
-                    <div class="book__spine-line" style="top:50%;"></div>
-                    <div class="book__spine-line" style="top:78%;"></div>
-                    <div class="book__vine">
-                        <svg viewBox="0 0 120 240">
-                            <path class="vine-stem" d="M70 230 Q50 190 30 160 T30 100 Q30 60 50 30 Q60 10 70 25 Q80 40 65 80 T75 140 Q85 170 70 190"/>
-                            <ellipse class="vine-leaf" cx="40" cy="140" rx="8" ry="4" transform="rotate(15,40,140)"/>
-                            <ellipse class="vine-leaf" cx="60" cy="80" rx="6.5" ry="3" transform="rotate(-25,60,80)"/>
-                            <circle class="vine-bud" cx="75" cy="110" r="4"/>
-                        </svg>
-                    </div>
-                </div>
-                <div class="book book--3" data-message="In the garden of friendship, you are the rarest bloom.">
-                    <div class="book__spine-detail"></div>
-                    <div class="book__spine-line" style="top:20%;"></div>
-                    <div class="book__spine-line" style="top:55%;"></div>
-                    <div class="book__spine-line" style="top:75%;"></div>
-                    <div class="book__vine">
-                        <svg viewBox="0 0 120 225">
-                            <path class="vine-stem" d="M20 200 Q50 170 80 140 T90 80 T60 30 Q50 15 45 30 Q40 45 55 70 T50 130 Q40 160 25 140"/>
-                            <ellipse class="vine-leaf" cx="80" cy="100" rx="7.5" ry="3.5" transform="rotate(-10,80,100)"/>
-                            <ellipse class="vine-leaf" cx="60" cy="55" rx="6.5" ry="3" transform="rotate(20,60,55)"/>
-                            <circle class="vine-bud" cx="45" cy="140" r="3.5"/>
-                        </svg>
-                    </div>
-                </div>
-                <div class="book book--4" data-message="Some friendships are written in the stars. Ours is in petals and lyrics.">
-                    <div class="book__spine-detail"></div>
-                    <div class="book__spine-line" style="top:12%;"></div>
-                    <div class="book__spine-line" style="top:48%;"></div>
-                    <div class="book__spine-line" style="top:70%;"></div>
-                    <div class="book__vine">
-                        <svg viewBox="0 0 120 235">
-                            <path class="vine-stem" d="M85 230 Q60 190 40 150 T30 80 Q30 40 50 15 Q60 5 65 20 Q70 35 55 65 T60 120 Q70 150 80 130"/>
-                            <ellipse class="vine-leaf" cx="45" cy="100" rx="7.5" ry="3.5" transform="rotate(-30,45,100)"/>
-                            <ellipse class="vine-leaf" cx="58" cy="55" rx="5.5" ry="2.5" transform="rotate(15,58,55)"/>
-                            <circle class="vine-bud" cx="75" cy="130" r="4"/>
-                        </svg>
-                    </div>
-                </div>
-                <div class="book book--5" data-message="You taught me that 'long live' isn't just a song — it's a promise.">
-                    <div class="book__spine-detail"></div>
-                    <div class="book__spine-line" style="top:16%;"></div>
-                    <div class="book__spine-line" style="top:52%;"></div>
-                    <div class="book__spine-line" style="top:74%;"></div>
-                    <div class="book__vine">
-                        <svg viewBox="0 0 120 230">
-                            <path class="vine-stem" d="M40 220 Q60 180 80 140 T70 70 Q60 40 50 20 Q40 5 35 25 Q30 45 50 80 T35 140 Q25 170 15 150"/>
-                            <ellipse class="vine-leaf" cx="70" cy="90" rx="8" ry="4" transform="rotate(25,70,90)"/>
-                            <ellipse class="vine-leaf" cx="48" cy="55" rx="6.5" ry="3" transform="rotate(-15,48,55)"/>
-                            <circle class="vine-bud" cx="30" cy="130" r="3.5"/>
-                        </svg>
-                    </div>
-                </div>
-            </div>
-
-            <p class="book-garden__lyric reveal" id="bookLyric">
-                "Take me to the lakes where all the poets went to die…"
-            </p>
-        </div>
-    </section>
-
-    <!-- Note card overlay -->
-    <div class="note-card__overlay" id="noteOverlay"></div>
-    <div class="note-card" id="noteCard">
-        <button class="note-card__close" id="noteClose" aria-label="Close note">&times;</button>
-        <p id="noteText"></p>
-    </div>
-
-    <!-- ==================== SWIFTIE CORNER ==================== -->
-    <section class="section swiftie-corner reveal" id="swiftie-corner">
-        <div class="section__inner">
-            <h2 class="section__heading">Swiftie Corner</h2>
-            <p class="section__subheading">Tap an album — listen &amp; bloom</p>
+            <h2 class="section__heading">Album Garden</h2>
+            <p class="section__subheading">Tap a cover to open its story</p>
             <div class="section__divider">
                 <span class="section__divider-line"></span>
                 <svg viewBox="0 0 28 40"><use href="#spider-lily-side"/></svg>
                 <span class="section__divider-line"></span>
             </div>
-
-            <div class="era-badges" id="eraBadges">
-                <button class="era-badge era-badge--lover" data-lyric="&ldquo;You're my, my, my… Lover&rdquo;" data-audio="lover">Lover</button>
-                <button class="era-badge era-badge--folklore" data-lyric="&ldquo;I'm doing good, I'm on some new shit&rdquo;" data-audio="folklore">folklore</button>
-                <button class="era-badge era-badge--fearless" data-lyric="&ldquo;With you I'd dance in a storm in my best dress&rdquo;" data-audio="fearless">Fearless</button>
-                <button class="era-badge era-badge--red" data-lyric="&ldquo;Loving him was red&rdquo;" data-audio="red">Red</button>
-                <button class="era-badge era-badge--evermore" data-lyric="&ldquo;This pain wouldn't be for evermore&rdquo;" data-audio="evermore">evermore</button>
-                <button class="era-badge era-badge--midnights" data-lyric="&ldquo;Meet me at midnight&rdquo;" data-audio="midnights">Midnights</button>
-                <button class="era-badge era-badge--speaknow" data-lyric="&ldquo;Long live the walls we crashed through&rdquo;" data-audio="speaknow">Speak Now</button>
-                <button class="era-badge era-badge--nineteen89" data-lyric="&ldquo;Wildest dreams&rdquo;" data-audio="1989">1989</button>
+            <div class="album-cards" id="albumCards">
+                <!-- dynamically filled by JS -->
             </div>
+        </div>
+    </section>
 
-            <div class="swiftie-lyric-display" id="swiftieLyricDisplay"></div>
-
-            <div class="swiftie-bloom-lily" id="swiftieBloomLily" aria-hidden="true">
-                <svg viewBox="0 0 100 200" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;">
-                    <path d="M50 190 Q48 140 50 100" stroke="#6B9E6B" stroke-width="2.4" fill="none" stroke-linecap="round"/>
-                    <g class="swiftie-bloom-petal" style="--sb-rotate:-50deg;">
-                        <path d="M50 100 Q40 76 30 52 Q24 38 34 28" stroke="#C41E3A" stroke-width="2.3" fill="none" stroke-linecap="round"/>
-                        <circle cx="34" cy="28" r="2" fill="#E8A0A8"/>
-                    </g>
-                    <g class="swiftie-bloom-petal" style="--sb-rotate:50deg;">
-                        <path d="M50 100 Q60 76 70 52 Q76 38 66 28" stroke="#C41E3A" stroke-width="2.3" fill="none" stroke-linecap="round"/>
-                        <circle cx="66" cy="28" r="2" fill="#E8A0A8"/>
-                    </g>
-                    <g class="swiftie-bloom-petal" style="--sb-rotate:-90deg;">
-                        <path d="M50 100 Q28 88 14 72 Q6 60 12 48" stroke="#C41E3A" stroke-width="2.3" fill="none" stroke-linecap="round"/>
-                        <circle cx="12" cy="48" r="2" fill="#E8A0A8"/>
-                    </g>
-                    <g class="swiftie-bloom-petal" style="--sb-rotate:90deg;">
-                        <path d="M50 100 Q72 88 86 72 Q94 60 88 48" stroke="#C41E3A" stroke-width="2.3" fill="none" stroke-linecap="round"/>
-                        <circle cx="88" cy="48" r="2" fill="#E8A0A8"/>
-                    </g>
-                    <g class="swiftie-bloom-petal" style="--sb-rotate:-20deg;">
-                        <path d="M50 100 Q44 78 38 58 Q34 44 42 34" stroke="#C41E3A" stroke-width="2" fill="none" stroke-linecap="round"/>
-                        <circle cx="42" cy="34" r="1.7" fill="#E8A0A8"/>
-                    </g>
-                    <g class="swiftie-bloom-petal" style="--sb-rotate:20deg;">
-                        <path d="M50 100 Q56 78 62 58 Q66 44 58 34" stroke="#C41E3A" stroke-width="2" fill="none" stroke-linecap="round"/>
-                        <circle cx="58" cy="34" r="1.7" fill="#E8A0A8"/>
-                    </g>
-                </svg>
+    <!-- ==================== ALBUM MODAL ==================== -->
+    <div class="modal-overlay" id="modalOverlay"></div>
+    <div class="modal-book" id="modalBook">
+        <button class="modal-close" id="modalClose" aria-label="Close">&times;</button>
+        <div class="modal-vines">
+            <svg viewBox="0 0 800 500" class="modal-vines-svg" preserveAspectRatio="none">
+                <path d="M20 450 Q60 300 20 150 Q0 50 60 20" stroke="#4A7C4A" stroke-width="4" fill="none" stroke-linecap="round"/>
+                <path d="M780 450 Q740 300 780 150 Q800 50 740 20" stroke="#4A7C4A" stroke-width="4" fill="none" stroke-linecap="round"/>
+                <ellipse cx="45" cy="120" rx="12" ry="5" fill="#6B9E6B" transform="rotate(30,45,120)"/>
+                <ellipse cx="755" cy="120" rx="12" ry="5" fill="#6B9E6B" transform="rotate(-30,755,120)"/>
+                <ellipse cx="35" cy="280" rx="10" ry="4" fill="#6B9E6B" transform="rotate(-20,35,280)"/>
+                <ellipse cx="765" cy="280" rx="10" ry="4" fill="#6B9E6B" transform="rotate(20,765,280)"/>
+            </svg>
+            <div class="modal-lily swaying-lily">
+                <svg viewBox="0 0 80 200"><use href="#spider-lily-full"/></svg>
             </div>
-            <p class="swiftie-hidden-message" id="swiftieHiddenMessage">
-                &ldquo;Long live the walls we crashed through,<br>I had the time of my life with you.&rdquo;
-            </p>
+        </div>
 
-            <button class="vinyl-play-btn" id="vinylPlayBtn" aria-label="Play music snippet" title="Play a snippet">
-                <svg viewBox="0 0 60 60" class="vinyl-record-svg" xmlns="http://www.w3.org/2000/svg">
+        <div class="modal-content">
+            <div class="modal-page modal-page--left">
+                <img id="modalAlbumCover" src="" alt="Album cover" class="modal-album-img">
+            </div>
+            <div class="modal-page modal-page--right">
+                <div class="modal-lyrics" id="modalLyrics"></div>
+            </div>
+        </div>
+
+        <div class="modal-player">
+            <div class="modal-vinyl" id="modalVinyl">
+                <svg viewBox="0 0 60 60" class="vinyl-record-svg">
                     <circle cx="30" cy="30" r="28" fill="#1a1a1a" stroke="#333" stroke-width="1.2"/>
                     <circle cx="30" cy="30" r="24" fill="none" stroke="#2a2a2a" stroke-width="0.6"/>
                     <circle cx="30" cy="30" r="20" fill="none" stroke="#2a2a2a" stroke-width="0.6"/>
@@ -383,74 +250,27 @@
                     <circle cx="27" cy="21" r="0.9" fill="#E8A0A8"/>
                     <circle cx="33" cy="21" r="0.9" fill="#E8A0A8"/>
                 </svg>
-            </button>
-            <p class="vinyl-play-label" id="vinylPlayLabel">Play a snippet</p>
-        </div>
-    </section>
-
-    <!-- ==================== MEMORY GARDEN ==================== -->
-    <section class="section memory-garden reveal" id="memory-garden">
-        <div class="section__inner">
-            <h2 class="section__heading">Memory Garden</h2>
-            <p class="memory-garden__caption">&ldquo;Long live all the magic we made…&rdquo;</p>
-            <div class="section__divider">
-                <span class="section__divider-line"></span>
-                <svg viewBox="0 0 28 50"><use href="#spider-lily-full"/></svg>
-                <span class="section__divider-line"></span>
             </div>
-
-            <div class="polaroid-masonry" id="polaroidMasonry">
-                <div class="polaroid polaroid--1 reveal reveal-delay-1">
-                    <div class="polaroid__lily" style="bottom:-14px;right:-14px;z-index:0;">
-                        <svg viewBox="0 0 60 260"><use href="#spider-lily-side"/></svg>
-                    </div>
-                    <img src="https://placehold.co/300x350/FADDE1/C41E3A?text=Memory+1" alt="Memory 1" loading="lazy" data-real-src="assets/images/memory-01.jpg">
-                </div>
-                <div class="polaroid polaroid--2 reveal reveal-delay-2">
-                    <img src="https://placehold.co/300x350/E8D5E0/9B1A2E?text=Memory+2" alt="Memory 2" loading="lazy" data-real-src="assets/images/memory-02.jpg">
-                </div>
-                <div class="polaroid polaroid--3 reveal reveal-delay-3">
-                    <div class="polaroid__lily" style="top:-14px;left:-14px;z-index:0;">
-                        <svg viewBox="0 0 60 200"><use href="#spider-lily-bud"/></svg>
-                    </div>
-                    <img src="https://placehold.co/300x350/D9E4DD/C41E3A?text=Memory+3" alt="Memory 3" loading="lazy" data-real-src="assets/images/memory-03.jpg">
-                </div>
-                <div class="polaroid polaroid--4 reveal reveal-delay-4">
-                    <img src="https://placehold.co/300x350/FDFBF7/C41E3A?text=Memory+4" alt="Memory 4" loading="lazy" data-real-src="assets/images/memory-04.jpg">
-                </div>
-                <div class="polaroid polaroid--5 reveal reveal-delay-5">
-                    <div class="polaroid__lily" style="bottom:-11px;left:-11px;z-index:0;">
-                        <svg viewBox="0 0 70 250"><use href="#spider-lily-side"/></svg>
-                    </div>
-                    <img src="https://placehold.co/300x350/FADDE1/9B1A2E?text=Memory+5" alt="Memory 5" loading="lazy" data-real-src="assets/images/memory-05.jpg">
-                </div>
-                <div class="polaroid polaroid--6 reveal reveal-delay-6">
-                    <img src="https://placehold.co/300x350/E8D5E0/C41E3A?text=Memory+6" alt="Memory 6" loading="lazy" data-real-src="assets/images/memory-06.jpg">
-                </div>
-                <div class="polaroid polaroid--7 reveal reveal-delay-7">
-                    <div class="polaroid__lily" style="top:-16px;right:-11px;z-index:0;">
-                        <svg viewBox="0 0 60 240"><use href="#spider-lily-full"/></svg>
-                    </div>
-                    <img src="https://placehold.co/300x350/D9E4DD/9B1A2E?text=Memory+7" alt="Memory 7" loading="lazy" data-real-src="assets/images/memory-07.jpg">
-                </div>
-                <div class="polaroid polaroid--8 reveal reveal-delay-8">
-                    <img src="https://placehold.co/300x350/FDFBF7/C41E3A?text=Memory+8" alt="Memory 8" loading="lazy" data-real-src="assets/images/memory-08.jpg">
-                </div>
+            <div class="waveform-pill" id="waveformPill">
+                <div class="waveform-bar"></div>
+                <div class="waveform-bar"></div>
+                <div class="waveform-bar"></div>
+                <div class="waveform-bar"></div>
+                <div class="waveform-bar"></div>
             </div>
         </div>
-    </section>
+    </div>
 
     <!-- ==================== FOOTER ==================== -->
     <footer class="footer">
         <div class="footer__lilies">
-            <svg viewBox="0 0 50 280"><use href="#spider-lily-full"/></svg>
-            <svg viewBox="0 0 40 200"><use href="#spider-lily-bud"/></svg>
-            <svg viewBox="0 0 55 260"><use href="#spider-lily-side"/></svg>
+            <svg viewBox="0 0 50 280" class="swaying-lily"><use href="#spider-lily-full"/></svg>
+            <svg viewBox="0 0 40 200" class="swaying-lily"><use href="#spider-lily-bud"/></svg>
+            <svg viewBox="0 0 55 260" class="swaying-lily"><use href="#spider-lily-side"/></svg>
         </div>
         <p>Made with love, for <span id="footerFriendName">Alice</span> — May our garden always bloom. 🌸</p>
     </footer>
 
-    <!-- JavaScript -->
     <script src="script.js" defer></script>
 </body>
 </html>

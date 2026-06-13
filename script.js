@@ -1,8 +1,6 @@
-// ==================== CONFIGURATION ====================
-const FRIEND_NAME = 'Alice'; // Change to your friend's name
-const MUSIC_SNIPPET_DURATION = 30; // seconds
+const FRIEND_NAME = 'Alice';
+const MUSIC_SNIPPET_DURATION = 30;
 
-// Audio file paths (place your MP3 files in an "audio" folder)
 const AUDIO_FILES = {
     lover: 'audio/lover.mp3',
     folklore: 'audio/folklore.mp3',
@@ -14,15 +12,39 @@ const AUDIO_FILES = {
     '1989': 'audio/1989.mp3',
 };
 
-// ==================== NAME PLACEHOLDERS ====================
-document.querySelectorAll('#friendName, #footerFriendName').forEach(el => {
-    el.textContent = FRIEND_NAME;
-});
+const ALBUM_COVERS = {
+    lover: 'https://placehold.co/300x300/F4B8C1/5C2D35?text=Lover',
+    folklore: 'https://placehold.co/300x300/7A9A7E/FDFBF7?text=folklore',
+    fearless: 'https://placehold.co/300x300/E6C27A/4A3820?text=Fearless',
+    red: 'https://placehold.co/300x300/C41E3A/fff?text=Red',
+    evermore: 'https://placehold.co/300x300/A0785C/fff?text=evermore',
+    midnights: 'https://placehold.co/300x300/3C4A6B/fff?text=Midnights',
+    speaknow: 'https://placehold.co/300x300/B8A0C9/3D2C4A?text=Speak+Now',
+    '1989': 'https://placehold.co/300x300/7BA4C7/fff?text=1989',
+};
+
+// ---------- DOM references ----------
+const petalContainer = document.getElementById('petalContainer');
+const gateOverlay = document.getElementById('gateOverlay');
+const heroBirthday = document.getElementById('heroBirthday');
+const heroLilyLeft = document.getElementById('heroLilyLeft');
+const heroLilyRight = document.getElementById('heroLilyRight');
+const albumCardsContainer = document.getElementById('albumCards');
+
+const modalOverlay = document.getElementById('modalOverlay');
+const modalBook = document.getElementById('modalBook');
+const modalClose = document.getElementById('modalClose');
+const modalAlbumCover = document.getElementById('modalAlbumCover');
+const modalLyrics = document.getElementById('modalLyrics');
+const modalVinyl = document.getElementById('modalVinyl');
+const waveformPill = document.getElementById('waveformPill');
+
+// ---------- Name placeholders ----------
+document.querySelectorAll('#friendName, #footerFriendName').forEach(el => el.textContent = FRIEND_NAME);
 document.getElementById('gateText').textContent = `🌸 For you, ${FRIEND_NAME}`;
 document.getElementById('heroBirthday').textContent = `Happy Birthday, ${FRIEND_NAME}! May your garden always bloom. 🌸`;
 
-// ==================== 1. FALLING PETALS ====================
-const petalContainer = document.getElementById('petalContainer');
+// ---------- Falling petals ----------
 for (let i = 0; i < 22; i++) {
     const petal = document.createElement('div');
     petal.className = 'falling-petal';
@@ -34,66 +56,25 @@ for (let i = 0; i < 22; i++) {
     petalContainer.appendChild(petal);
 }
 
-// ==================== 2. SCROLL REVEALS ====================
-const revealElements = document.querySelectorAll('.reveal');
-const sectionObserver = new IntersectionObserver((entries) => {
+// ---------- Scroll reveal ----------
+const revealEls = document.querySelectorAll('.reveal');
+const observer = new IntersectionObserver(entries => {
     entries.forEach(entry => {
         if (entry.isIntersecting) {
             entry.target.classList.add('visible');
-            sectionObserver.unobserve(entry.target);
+            observer.unobserve(entry.target);
         }
     });
 }, { threshold: 0.15 });
-revealElements.forEach(el => sectionObserver.observe(el));
+revealEls.forEach(el => observer.observe(el));
 
-// ==================== 3. BOOK NOTE CARDS ====================
-const books = document.querySelectorAll('.book');
-const noteCard = document.getElementById('noteCard');
-const noteOverlay = document.getElementById('noteOverlay');
-const noteText = document.getElementById('noteText');
-const noteClose = document.getElementById('noteClose');
-
-function openNote(msg) {
-    noteText.textContent = msg;
-    noteCard.classList.add('active');
-    noteOverlay.classList.add('active');
-}
-function closeNote() {
-    noteCard.classList.remove('active');
-    noteOverlay.classList.remove('active');
-}
-books.forEach(book => {
-    book.addEventListener('click', () => {
-        const msg = book.getAttribute('data-message');
-        if (msg) openNote(msg);
-    });
-});
-noteClose.addEventListener('click', closeNote);
-noteOverlay.addEventListener('click', closeNote);
-document.addEventListener('keydown', e => {
-    if (e.key === 'Escape') closeNote();
-});
-
-// ==================== 4. GARDEN GATE OVERLAY ====================
-const gateOverlay = document.getElementById('gateOverlay');
-const heroBirthday = document.getElementById('heroBirthday');
-const heroLilyLeft = document.getElementById('heroLilyLeft');
-const heroLilyRight = document.getElementById('heroLilyRight');
+// ---------- Gate opening ----------
 let gateOpened = false;
-
 gateOverlay.addEventListener('click', () => {
     if (gateOpened) return;
     gateOpened = true;
-
-    // Bloom the gate lily
     gateOverlay.classList.add('bloom');
-
-    // Fade out overlay after the bloom animation completes
-    setTimeout(() => {
-        gateOverlay.classList.add('hidden');
-    }, 1800);
-
-    // Reveal hero birthday message and bloom hero lilies with a slight delay
+    setTimeout(() => gateOverlay.classList.add('hidden'), 1800);
     setTimeout(() => {
         heroBirthday.classList.add('revealed');
         heroLilyLeft?.classList.add('bloomed');
@@ -101,159 +82,166 @@ gateOverlay.addEventListener('click', () => {
     }, 1400);
 });
 
-// ==================== 5. ERA BADGES + TYPEWRITER LYRIC ====================
-const eraBadges = document.querySelectorAll('.era-badge');
-const swiftieLyricDisplay = document.getElementById('swiftieLyricDisplay');
-let typewriterTimer = null;
-let currentAudioKey = null; // tracks which era's music to play
-
-function typeLyric(lyric) {
-    if (typewriterTimer) clearInterval(typewriterTimer);
-    swiftieLyricDisplay.classList.remove('active');
-    swiftieLyricDisplay.textContent = '';
-    swiftieLyricDisplay.classList.add('active');
-
-    let i = 0;
-    const speed = 38 + Math.random() * 22;
-    typewriterTimer = setInterval(() => {
-        if (i < lyric.length) {
-            swiftieLyricDisplay.textContent += lyric.charAt(i);
-            i++;
-        } else {
-            clearInterval(typewriterTimer);
-            typewriterTimer = null;
-        }
-    }, speed);
-}
-
-eraBadges.forEach(badge => {
-    badge.addEventListener('click', () => {
-        const lyric = badge.getAttribute('data-lyric');
-        const audioKey = badge.getAttribute('data-audio');
-        if (lyric) typeLyric(lyric);
-        if (audioKey && AUDIO_FILES[audioKey]) {
-            currentAudioKey = audioKey;
-        }
-        togglePlayback();
-    });
+// ---------- Build album cards ----------
+Object.keys(AUDIO_FILES).forEach(key => {
+    const card = document.createElement('div');
+    card.className = 'album-card';
+    card.dataset.album = key;
+    card.innerHTML = `<img src="${ALBUM_COVERS[key]}" alt="${key}" loading="lazy">
+                      <div class="album-card__name">${key}</div>`;
+    albumCardsContainer.appendChild(card);
 });
 
-// ==================== 6. SWIFTIE BLOOMING LILY (scroll triggered) ====================
-const swiftieBloomLily = document.getElementById('swiftieBloomLily');
-const swiftieHiddenMessage = document.getElementById('swiftieHiddenMessage');
-let swiftieLilyBloomed = false;
-
-const swiftieLilyObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-        if (entry.isIntersecting && !swiftieLilyBloomed) {
-            swiftieLilyBloomed = true;
-            setTimeout(() => {
-                swiftieBloomLily?.classList.add('bloomed');
-                swiftieHiddenMessage?.classList.add('revealed');
-            }, 300);
-            swiftieLilyObserver.unobserve(entry.target);
-        }
-    });
-}, { threshold: 0.4 });
-if (swiftieBloomLily) swiftieLilyObserver.observe(swiftieBloomLily);
-
-// ==================== 7. LOCAL MP3 AUDIO PLAYER ====================
-const vinylPlayBtn = document.getElementById('vinylPlayBtn');
-const vinylPlayLabel = document.getElementById('vinylPlayLabel');
-
-let audioElement = null; // current playing Audio instance
+// ---------- Audio & lyrics sync ----------
+let audioElement = null;
+let currentAudioKey = null;
 let isPlaying = false;
 let playTimeout = null;
+let lyricsData = null;
 
-/**
- * Stop and cleanup the current audio
- */
+async function fetchLyrics() {
+    try {
+        const resp = await fetch('lyrics.json');
+        lyricsData = await resp.json();
+    } catch (err) {
+        console.warn('lyrics.json not loaded, lyric sync disabled', err);
+        lyricsData = {};
+    }
+}
+fetchLyrics();
+
 function stopAudio() {
     if (audioElement) {
         audioElement.pause();
         audioElement.currentTime = 0;
+        audioElement.removeEventListener('timeupdate', onTimeUpdate);
         audioElement = null;
     }
     if (playTimeout) clearTimeout(playTimeout);
     isPlaying = false;
-    vinylPlayBtn?.classList.remove('playing');
-    if (vinylPlayLabel) vinylPlayLabel.textContent = 'Play a snippet';
+    modalVinyl?.classList.remove('playing');
+    waveformPill?.classList.remove('playing');
 }
 
-/**
- * Play a short snippet from the specified audio file
- * @param {string} audioKey - key from AUDIO_FILES
- */
-function playSnippet(audioKey) {
-    // If already playing, stop previous
-    stopAudio();
-
-    const src = AUDIO_FILES[audioKey];
-    if (!src) {
-        console.warn('No audio file defined for', audioKey);
-        return;
+function onTimeUpdate() {
+    if (!audioElement || !lyricsData || !currentAudioKey) return;
+    const albumLyrics = lyricsData[currentAudioKey];
+    if (!albumLyrics || !albumLyrics.lines) return;
+    const currentTime = audioElement.currentTime - (albumLyrics.startTime || 0);
+    const lines = albumLyrics.lines;
+    let activeIndex = -1;
+    for (let i = 0; i < lines.length; i++) {
+        if (currentTime >= lines[i].time) activeIndex = i;
     }
+    document.querySelectorAll('.lyric-line').forEach((line, idx) => {
+        line.classList.toggle('active', idx === activeIndex);
+    });
+}
 
-    // Create a new Audio element
+function playSnippet(key) {
+    stopAudio();
+    currentAudioKey = key;
+    const src = AUDIO_FILES[key];
+    if (!src) return;
+
     audioElement = new Audio(src);
     audioElement.preload = 'auto';
 
-    // When metadata is loaded, set start time and play
+    // Populate lyrics
+    if (modalLyrics) {
+        modalLyrics.innerHTML = '';
+        if (lyricsData && lyricsData[key] && lyricsData[key].lines) {
+            lyricsData[key].lines.forEach(line => {
+                const p = document.createElement('p');
+                p.className = 'lyric-line';
+                p.textContent = line.text;
+                modalLyrics.appendChild(p);
+            });
+        } else {
+            modalLyrics.innerHTML = '<p class="lyric-line active">♫ No lyrics loaded ♫</p>';
+        }
+    }
+
     audioElement.addEventListener('loadedmetadata', () => {
-        // Seek to 30s if the file is long enough; otherwise start from 0
-        const startTime = audioElement.duration > MUSIC_SNIPPET_DURATION ? MUSIC_SNIPPET_DURATION : 0;
+        const startTime = lyricsData?.[key]?.startTime || 0;
         audioElement.currentTime = startTime;
-        audioElement.play().catch(err => {
-            console.warn('Audio playback failed:', err);
-            stopAudio();
-        });
+        audioElement.play().catch(err => { console.warn('Playback failed', err); stopAudio(); });
     });
 
-    // Set timeout to stop after MUSIC_SNIPPET_DURATION seconds
     audioElement.addEventListener('play', () => {
         isPlaying = true;
-        vinylPlayBtn?.classList.add('playing');
-        if (vinylPlayLabel) vinylPlayLabel.textContent = 'Playing…';
-
-        playTimeout = setTimeout(() => {
-            stopAudio();
-        }, MUSIC_SNIPPET_DURATION * 1000);
+        modalVinyl.classList.add('playing');
+        waveformPill.classList.add('playing');
+        audioElement.addEventListener('timeupdate', onTimeUpdate);
+        playTimeout = setTimeout(() => stopAudio(), MUSIC_SNIPPET_DURATION * 1000);
     });
 
-    // Handle natural end (if file shorter than snippet)
-    audioElement.addEventListener('ended', () => {
-        stopAudio();
-    });
-
-    // Handle errors
+    audioElement.addEventListener('ended', stopAudio);
     audioElement.addEventListener('error', () => {
-        console.warn('Error loading audio:', src);
+        console.warn('Audio error', src);
         stopAudio();
     });
-
-    // If the browser blocks autoplay, we still attempt
-    // For mobile, user gesture ensures play() works
 }
 
-/**
- * Toggle play/pause of the current era's snippet
- */
 function togglePlayback() {
     if (isPlaying) {
         stopAudio();
-    } else {
-        // Play current selected era, or default to 'lover' if none set
-        const era = currentAudioKey || 'lover';
-        playSnippet(era);
+    } else if (currentAudioKey) {
+        playSnippet(currentAudioKey);
     }
 }
 
+// ---------- Ambient fireflies ----------
+let ambientElements = [];
 
-// ==================== 8. OPTIONAL: Swap placeholder images with real ones ====================
-// Uncomment the block below and replace with your actual image paths:
-//
-// document.querySelectorAll('.polaroid img[data-real-src]').forEach(img => {
-//     img.src = img.getAttribute('data-real-src');
-// });
+function createAmbient() {
+    removeAmbient();
+    for (let i = 0; i < 12; i++) {
+        const firefly = document.createElement('div');
+        firefly.className = 'ambient-firefly';
+        firefly.style.left = Math.random() * 90 + '%';
+        firefly.style.top = Math.random() * 90 + '%';
+        firefly.style.animationDelay = Math.random() * 4 + 's';
+        firefly.style.animationDuration = 4 + Math.random() * 6 + 's';
+        firefly.style.width = 6 + Math.random() * 8 + 'px';
+        firefly.style.height = firefly.style.width;
+        document.body.appendChild(firefly);
+        ambientElements.push(firefly);
+    }
+}
+
+function removeAmbient() {
+    ambientElements.forEach(el => el.remove());
+    ambientElements = [];
+}
+
+// ---------- Modal open/close ----------
+function openModal(albumKey) {
+    if (modalAlbumCover) modalAlbumCover.src = ALBUM_COVERS[albumKey];
+    modalOverlay.classList.add('active');
+    modalBook.classList.add('active');
+    createAmbient();
+    playSnippet(albumKey);
+}
+
+function closeModal() {
+    stopAudio();
+    modalOverlay.classList.remove('active');
+    modalBook.classList.remove('active');
+    removeAmbient();
+}
+
+// Album card clicks
+document.querySelectorAll('.album-card').forEach(card => {
+    card.addEventListener('click', () => {
+        const album = card.dataset.album;
+        if (album) openModal(album);
+    });
+});
+
+modalClose.addEventListener('click', closeModal);
+modalOverlay.addEventListener('click', closeModal);
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+modalVinyl.addEventListener('click', togglePlayback);
 
 console.log(`🌸 Dear Reader's Garden is in full bloom for ${FRIEND_NAME}.`);

@@ -1,0 +1,26 @@
+{
+    "lover": {
+        "startTime": 30,
+        "lines": [
+            { "time": 0, "text": "You're my, my, my…" },
+            { "time": 4, "text": "Lover" },
+            { "time": 8, "text": "Can I go where you go?" },
+            { "time": 12, "text": "Can we always be this close?" },
+            { "time": 16, "text": "Forever and ever" },
+            { "time": 20, "text": "Take me out, and take me home" },
+            { "time": 24, "text": "You're my, my, my, my…" },
+            { "time": 28, "text": "Lover" }
+        ]
+    },
+    "folklore": {
+        "startTime": 30,
+        "lines": [
+            { "time": 0, "text": "I'm doing good, I'm on some new shit" },
+            { "time": 5, "text": "Been saying 'yes' instead of 'no'" },
+            { "time": 10, "text": "I thought I saw you at the bus stop" },
+            { "time": 15, "text": "I didn't though" },
+            { "time": 20, "text": "But wouldn't it be lovely?" },
+            { "time": 25, "text": "I'm doing good" }
+        ]
+    }
+}
