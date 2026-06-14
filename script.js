@@ -1,5 +1,5 @@
 const FRIEND_NAME = 'Alice';
-const MUSIC_SNIPPET_DURATION = 30;
+const MUSIC_SNIPPET_DURATION = 30; // ← no longer used; songs play fully
 
 const AUDIO_FILES = {
     lover: 'audio/lover.mp3',
@@ -12,10 +12,21 @@ const AUDIO_FILES = {
     '1989': 'audio/1989.mp3',
 };
 
+const SONG_TITLES = {
+    lover: 'Lover',
+    folklore: 'cardigan',
+    fearless: 'Love Story',
+    red: 'All Too Well (10 Minute Version)',
+    evermore: 'willow',
+    midnights: 'Anti-Hero',
+    speaknow: 'Mine',
+    '1989': 'Shake It Off'
+};
+
 const ALBUM_COVERS = {
     lover: 'https://placehold.co/300x300/F4B8C1/5C2D35?text=Lover',
     folklore: 'https://placehold.co/300x300/7A9A7E/FDFBF7?text=folklore',
-    fearless: 'https://placehold.co/300x300/E6C27A/4A3820?text=Fearless',
+    fearless: 'assets/imgs/ls.png',
     red: 'https://placehold.co/300x300/C41E3A/fff?text=Red',
     evermore: 'https://placehold.co/300x300/A0785C/fff?text=evermore',
     midnights: 'https://placehold.co/300x300/3C4A6B/fff?text=Midnights',
@@ -38,6 +49,7 @@ const modalAlbumCover = document.getElementById('modalAlbumCover');
 const modalLyrics = document.getElementById('modalLyrics');
 const modalVinyl = document.getElementById('modalVinyl');
 const waveformPill = document.getElementById('waveformPill');
+const nowPlayingEl = document.getElementById('nowPlaying');
 
 // ---------- Name placeholders ----------
 document.querySelectorAll('#friendName, #footerFriendName').forEach(el => el.textContent = FRIEND_NAME);
@@ -96,8 +108,9 @@ Object.keys(AUDIO_FILES).forEach(key => {
 let audioElement = null;
 let currentAudioKey = null;
 let isPlaying = false;
-let playTimeout = null;
+let playTimeout = null;        // ← will be removed (no more snippet limit)
 let lyricsData = null;
+let typewriterTimer = null;   // for character-by-character typing
 
 async function fetchLyrics() {
     try {
@@ -117,25 +130,70 @@ function stopAudio() {
         audioElement.removeEventListener('timeupdate', onTimeUpdate);
         audioElement = null;
     }
-    if (playTimeout) clearTimeout(playTimeout);
+    // Stop any in‑progress typewriter
+    if (typewriterTimer) {
+        clearInterval(typewriterTimer);
+        typewriterTimer = null;
+    }
     isPlaying = false;
     modalVinyl?.classList.remove('playing');
     waveformPill?.classList.remove('playing');
 }
 
+// ---------- Barrel‑like lyric display ----------
 function onTimeUpdate() {
     if (!audioElement || !lyricsData || !currentAudioKey) return;
     const albumLyrics = lyricsData[currentAudioKey];
     if (!albumLyrics || !albumLyrics.lines) return;
-    const currentTime = audioElement.currentTime - (albumLyrics.startTime || 0);
+
+    const currentTime = audioElement.currentTime;
     const lines = albumLyrics.lines;
+
     let activeIndex = -1;
     for (let i = 0; i < lines.length; i++) {
         if (currentTime >= lines[i].time) activeIndex = i;
     }
-    document.querySelectorAll('.lyric-line').forEach((line, idx) => {
-        line.classList.toggle('active', idx === activeIndex);
-    });
+
+    const lyricReel = document.getElementById('lyricReel');
+    if (!lyricReel) return;
+
+    const prevActive = parseInt(lyricReel.dataset.activeIndex, 10) || -1;
+    if (activeIndex === prevActive) return;       // same line, no change
+
+    // ---------- 1. Outgoing line: slide‑up clone ----------
+    if (prevActive !== -1) {
+        const outgoingText = lyricReel.textContent;   // current text (could be partially typed)
+        const outgoing = document.createElement('span');
+        outgoing.className = 'lyric-reel-outgoing';
+        outgoing.textContent = outgoingText;
+        lyricReel.appendChild(outgoing);
+        // The clone automatically animates out (see CSS)
+        setTimeout(() => {
+            if (outgoing && outgoing.parentNode) outgoing.remove();
+        }, 500);
+    }
+
+    // ---------- 2. Cancel any ongoing typing ----------
+    if (typewriterTimer) {
+        clearInterval(typewriterTimer);
+        typewriterTimer = null;
+    }
+
+    // ---------- 3. Start typewriter for the new line ----------
+    const newLine = lines[activeIndex] ? lines[activeIndex].text : '♫';
+    lyricReel.textContent = '';          // clear completely
+    lyricReel.dataset.activeIndex = activeIndex;
+
+    let charIndex = 0;
+    typewriterTimer = setInterval(() => {
+        if (charIndex < newLine.length) {
+            lyricReel.textContent += newLine[charIndex];
+            charIndex++;
+        } else {
+            clearInterval(typewriterTimer);
+            typewriterTimer = null;
+        }
+    }, 20);   // typing speed: ~40ms per character
 }
 
 function playSnippet(key) {
@@ -147,24 +205,30 @@ function playSnippet(key) {
     audioElement = new Audio(src);
     audioElement.preload = 'auto';
 
-    // Populate lyrics
+    // ---------- Prepare lyric reel ----------
     if (modalLyrics) {
         modalLyrics.innerHTML = '';
-        if (lyricsData && lyricsData[key] && lyricsData[key].lines) {
-            lyricsData[key].lines.forEach(line => {
-                const p = document.createElement('p');
-                p.className = 'lyric-line';
-                p.textContent = line.text;
-                modalLyrics.appendChild(p);
-            });
-        } else {
-            modalLyrics.innerHTML = '<p class="lyric-line active">♫ No lyrics loaded ♫</p>';
-        }
+        const reel = document.createElement('div');
+        reel.id = 'lyricReel';
+        reel.className = 'lyric-reel';
+        reel.dataset.activeIndex = '-1';
+        // Start completely empty – the first line will type in
+        reel.textContent = '';
+        modalLyrics.appendChild(reel);
+    }
+    // Inside playSnippet, after creating the lyric reel:
+    if (nowPlayingEl) {
+        nowPlayingEl.textContent = 'Now Playing: ' + (SONG_TITLES[key] || key);
+        // Delay the class add to let the modal book open animation finish
+        setTimeout(() => {
+            nowPlayingEl.classList.add('active');
+        }, 700);
     }
 
+
     audioElement.addEventListener('loadedmetadata', () => {
-        const startTime = lyricsData?.[key]?.startTime || 0;
-        audioElement.currentTime = startTime;
+        // Always start from 0 (no snippet offset)
+        audioElement.currentTime = 0;
         audioElement.play().catch(err => { console.warn('Playback failed', err); stopAudio(); });
     });
 
@@ -173,7 +237,8 @@ function playSnippet(key) {
         modalVinyl.classList.add('playing');
         waveformPill.classList.add('playing');
         audioElement.addEventListener('timeupdate', onTimeUpdate);
-        playTimeout = setTimeout(() => stopAudio(), MUSIC_SNIPPET_DURATION * 1000);
+        // ❌ Remove the 30‑second snippet limit
+        // playTimeout = setTimeout(() => stopAudio(), MUSIC_SNIPPET_DURATION * 1000);
     });
 
     audioElement.addEventListener('ended', stopAudio);
@@ -229,6 +294,11 @@ function closeModal() {
     modalOverlay.classList.remove('active');
     modalBook.classList.remove('active');
     removeAmbient();
+    // Hide the now‑playing banner
+    if (nowPlayingEl) {
+        nowPlayingEl.classList.remove('active');
+        nowPlayingEl.textContent = '';
+    }
 }
 
 // Album card clicks

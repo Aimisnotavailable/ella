@@ -248,6 +248,7 @@ h1,h2,h3,h4 { font-family: 'Playfair Display', serif; font-weight: 600; }
     filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
 }
 
+/* ---------- Modal Content Layout ---------- */
 .modal-content {
     display: flex; flex: 1; padding: 2rem 2rem 1rem;
     position: relative; z-index:1;
@@ -260,15 +261,73 @@ h1,h2,h3,h4 { font-family: 'Playfair Display', serif; font-weight: 600; }
 .modal-page { flex:1; padding: 1rem; }
 .modal-page--left { display: flex; align-items: center; justify-content: center; }
 .modal-album-img { max-width:100%; max-height:260px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
-.modal-page--right { overflow-y: auto; max-height: 300px; }
-.modal-lyrics { font-family: 'Caveat', cursive; font-size: 1.4rem; color: var(--text-dark); line-height: 1.8; }
-.modal-lyrics .lyric-line {
-    opacity: 0.4; transition: opacity 0.2s;
-    margin-bottom: 6px;
-}
-.modal-lyrics .lyric-line.active { opacity:1; color: var(--crimson-dark); font-weight: 600; }
 
-/* Player area */
+/* The right page now becomes a centered container for the lyric reel */
+.modal-page--right {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    max-height: 300px;          /* Keep the maximum height */
+    overflow: hidden;          /* Prevent any overflow from the reel */
+}
+
+/* ---------- Lyric Reel (barrel fade & slide) ---------- */
+#lyricReel {
+    position: relative;
+    width: 100%;
+    min-height: 2.8em;           /* Enough height for a single line */
+    line-height: 1.8;
+    text-align: center;
+    font-family: 'Caveat', cursive;  /* Matches the previous lyric font */
+    font-size: 1.6rem;
+    color: var(--text-dark);
+    white-space: normal;        /* Allow text to wrap if needed */
+    overflow: hidden;
+    word-break: break-word;     /* For long lyrics on small screens */
+}
+
+.lyric-reel-outgoing {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    animation: reelUpOut 0.5s ease forwards;
+    color: inherit;
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: none;
+}
+
+/* ---------- Now Playing Banner ---------- */
+.now-playing {
+    font-family: 'Caveat', cursive;
+    font-size: 1.2rem;
+    color: var(--crimson);
+    text-align: center;
+    margin-bottom: 1rem;
+    opacity: 0;
+    transform: translateY(-6px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+    letter-spacing: 0.3px;
+}
+
+.now-playing.active {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+
+@keyframes reelUpIn {
+    0%   { opacity: 0; transform: translateY(1.2em); }
+    100% { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes reelUpOut {
+    0%   { opacity: 1; transform: translateY(0); }
+    100% { opacity: 0; transform: translateY(-1.2em); }
+}
+
+/* ---------- Player area ---------- */
 .modal-player {
     display: flex; align-items: center; justify-content: center;
     gap: 1.2rem; padding: 0.8rem 2rem 1.2rem;
