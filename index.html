@@ -210,7 +210,6 @@
     <!-- ==================== ALBUM MODAL ==================== -->
     <div class="modal-overlay" id="modalOverlay"></div>
     <div class="modal-book" id="modalBook">
-        <div class="now-playing" id="nowPlaying"> </div>
         <button class="modal-close" id="modalClose" aria-label="Close">&times;</button>
         <div class="modal-vines">
             <svg viewBox="0 0 800 500" class="modal-vines-svg" preserveAspectRatio="none">
@@ -228,9 +227,13 @@
 
         <div class="modal-content">
             <div class="modal-page modal-page--left">
-                <img id="modalAlbumCover" src="" alt="Album cover" class="modal-album-img">
+                <div class="modal-album-cover">
+                    <div class="modal-petal-container" id="modalPetalContainer" aria-hidden="true"></div>
+                    <img id="modalAlbumCover" src="" alt="Album cover" class="modal-album-img">
+                </div>
             </div>
             <div class="modal-page modal-page--right">
+                <div class="now-playing" id="nowPlaying"></div>
                 <div class="modal-lyrics" id="modalLyrics"></div>
             </div>
         </div>

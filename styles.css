@@ -260,42 +260,54 @@ h1,h2,h3,h4 { font-family: 'Playfair Display', serif; font-weight: 600; }
 }
 .modal-page { flex:1; padding: 1rem; }
 .modal-page--left { display: flex; align-items: center; justify-content: center; }
-.modal-album-img { max-width:100%; max-height:260px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
 
-/* The right page now becomes a centered container for the lyric reel */
-.modal-page--right {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    max-height: 300px;          /* Keep the maximum height */
-    overflow: hidden;          /* Prevent any overflow from the reel */
-}
-
-/* ---------- Lyric Reel (barrel fade & slide) ---------- */
-#lyricReel {
+/* ---------- Album Cover Animations (breathing + floating + shimmer) ---------- */
+.modal-album-cover {
     position: relative;
-    width: 100%;
-    min-height: 2.8em;           /* Enough height for a single line */
-    line-height: 1.8;
-    text-align: center;
-    font-family: 'Caveat', cursive;  /* Matches the previous lyric font */
-    font-size: 1.6rem;
-    color: var(--text-dark);
-    white-space: normal;        /* Allow text to wrap if needed */
+    display: inline-block;
+    border-radius: 8px;
     overflow: hidden;
-    word-break: break-word;     /* For long lyrics on small screens */
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    animation: albumFloat 6s ease-in-out infinite;
+}
+.modal-album-cover .modal-album-img {
+    display: block;
+    max-width: 100%;
+    max-height: 260px;
+    border-radius: 8px;
+    animation: albumBreathe 4s ease-in-out infinite;
+}
+.modal-album-cover::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(
+        115deg,
+        transparent 40%,
+        rgba(255, 255, 255, 0.2) 45%,
+        rgba(255, 255, 255, 0.35) 50%,
+        rgba(255, 255, 255, 0.2) 55%,
+        transparent 60%
+    );
+    animation: shimmerSweep 3s linear infinite;
+    pointer-events: none;
 }
 
-.lyric-reel-outgoing {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    animation: reelUpOut 0.5s ease forwards;
-    color: inherit;
-    opacity: 1;
-    transform: translateY(0);
-    pointer-events: none;
+@keyframes albumFloat {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    25%      { transform: translateY(-3px) rotate(0.2deg); }
+    75%      { transform: translateY(3px) rotate(-0.2deg); }
+}
+@keyframes albumBreathe {
+    0%, 100% { transform: scale(1); }
+    50%      { transform: scale(1.03); }
+}
+@keyframes shimmerSweep {
+    0%   { transform: translateX(-100%) translateY(-100%); }
+    100% { transform: translateX(100%) translateY(100%); }
 }
 
 /* ---------- Now Playing Banner ---------- */
@@ -310,21 +322,33 @@ h1,h2,h3,h4 { font-family: 'Playfair Display', serif; font-weight: 600; }
     transition: opacity 0.5s ease, transform 0.5s ease;
     letter-spacing: 0.3px;
 }
-
 .now-playing.active {
     opacity: 1;
     transform: translateY(0);
 }
 
-
-@keyframes reelUpIn {
-    0%   { opacity: 0; transform: translateY(1.2em); }
-    100% { opacity: 1; transform: translateY(0); }
+/* Right page centers the lyric reel */
+.modal-page--right {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    max-height: 300px;
+    overflow: hidden;
 }
 
-@keyframes reelUpOut {
-    0%   { opacity: 1; transform: translateY(0); }
-    100% { opacity: 0; transform: translateY(-1.2em); }
+/* ---------- Lyric Reel (time‑based typewriter) ---------- */
+#lyricReel {
+    position: relative;
+    width: 100%;
+    min-height: 2.8em;
+    line-height: 1.8;
+    text-align: center;
+    font-family: 'Caveat', cursive;
+    font-size: 1.6rem;
+    color: var(--text-dark);
+    white-space: normal;
+    word-break: break-word;
 }
 
 /* ---------- Player area ---------- */
@@ -338,6 +362,35 @@ h1,h2,h3,h4 { font-family: 'Playfair Display', serif; font-weight: 600; }
 .modal-vinyl { width: 55px; height: 55px; cursor: pointer; }
 .modal-vinyl.playing .vinyl-record-svg { animation: spinRecord 2s linear infinite; }
 @keyframes spinRecord { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
+
+/* ---------- Modal Falling Petals ---------- */
+.modal-petal-container {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 5;
+    overflow: hidden;
+}
+
+.modal-falling-petal {
+    position: absolute;
+    top: -30px;
+    animation: modalPetalFall linear infinite;
+    opacity: 0.7;
+    will-change: transform;
+}
+.modal-falling-petal svg {
+    width: 20px;
+    height: auto;
+}
+
+@keyframes modalPetalFall {
+    0%   { transform: translateY(-30px) rotate(0deg) translateX(0px); opacity: 0.9; }
+    25%  { transform: translateY(30%) rotate(75deg) translateX(15px); opacity: 0.75; }
+    50%  { transform: translateY(60%) rotate(160deg) translateX(-10px); opacity: 0.6; }
+    75%  { transform: translateY(85%) rotate(250deg) translateX(15px); opacity: 0.3; }
+    100% { transform: translateY(110%) rotate(360deg) translateX(-5px); opacity: 0; }
+}
 
 .waveform-pill {
     display: flex; align-items: center; gap: 4px; height: 30px;

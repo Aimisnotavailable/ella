@@ -1,5 +1,5 @@
 const FRIEND_NAME = 'Alice';
-const MUSIC_SNIPPET_DURATION = 30; // ← no longer used; songs play fully
+const CHARACTER_DELAY = 40;      // typing speed in ms (lower = faster)
 
 const AUDIO_FILES = {
     lover: 'audio/lover.mp3',
@@ -12,21 +12,10 @@ const AUDIO_FILES = {
     '1989': 'audio/1989.mp3',
 };
 
-const SONG_TITLES = {
-    lover: 'Lover',
-    folklore: 'cardigan',
-    fearless: 'Love Story',
-    red: 'All Too Well (10 Minute Version)',
-    evermore: 'willow',
-    midnights: 'Anti-Hero',
-    speaknow: 'Mine',
-    '1989': 'Shake It Off'
-};
-
 const ALBUM_COVERS = {
     lover: 'https://placehold.co/300x300/F4B8C1/5C2D35?text=Lover',
     folklore: 'https://placehold.co/300x300/7A9A7E/FDFBF7?text=folklore',
-    fearless: 'assets/imgs/ls.png',
+    fearless: 'https://placehold.co/300x300/E6C27A/4A3820?text=Fearless',
     red: 'https://placehold.co/300x300/C41E3A/fff?text=Red',
     evermore: 'https://placehold.co/300x300/A0785C/fff?text=evermore',
     midnights: 'https://placehold.co/300x300/3C4A6B/fff?text=Midnights',
@@ -34,8 +23,19 @@ const ALBUM_COVERS = {
     '1989': 'https://placehold.co/300x300/7BA4C7/fff?text=1989',
 };
 
+const SONG_TITLES = {
+    lover: 'Lover',
+    folklore: 'cardigan',
+    fearless: 'Love Story',
+    red: 'All Too Well (10 Minute Version)',
+    evermore: 'willow',
+    midnights: 'Anti-Hero',
+    speaknow: 'Mine',
+    '1989': 'Shake It Off',
+};
+
 // ---------- DOM references ----------
-const petalContainer = document.getElementById('petalContainer');
+const petalContainer = document.getElementById('modalPetalContainer');
 const gateOverlay = document.getElementById('gateOverlay');
 const heroBirthday = document.getElementById('heroBirthday');
 const heroLilyLeft = document.getElementById('heroLilyLeft');
@@ -50,13 +50,14 @@ const modalLyrics = document.getElementById('modalLyrics');
 const modalVinyl = document.getElementById('modalVinyl');
 const waveformPill = document.getElementById('waveformPill');
 const nowPlayingEl = document.getElementById('nowPlaying');
+const modalPetalContainer = document.getElementById('modalPetalContainer');
 
 // ---------- Name placeholders ----------
 document.querySelectorAll('#friendName, #footerFriendName').forEach(el => el.textContent = FRIEND_NAME);
 document.getElementById('gateText').textContent = `🌸 For you, ${FRIEND_NAME}`;
 document.getElementById('heroBirthday').textContent = `Happy Birthday, ${FRIEND_NAME}! May your garden always bloom. 🌸`;
 
-// ---------- Falling petals ----------
+// ---------- Falling petals in hero ----------
 for (let i = 0; i < 22; i++) {
     const petal = document.createElement('div');
     petal.className = 'falling-petal';
@@ -108,9 +109,9 @@ Object.keys(AUDIO_FILES).forEach(key => {
 let audioElement = null;
 let currentAudioKey = null;
 let isPlaying = false;
-let playTimeout = null;        // ← will be removed (no more snippet limit)
 let lyricsData = null;
-let typewriterTimer = null;   // for character-by-character typing
+let typewriterInterval = null;
+let lastActiveIndex = -1;
 
 async function fetchLyrics() {
     try {
@@ -130,70 +131,52 @@ function stopAudio() {
         audioElement.removeEventListener('timeupdate', onTimeUpdate);
         audioElement = null;
     }
-    // Stop any in‑progress typewriter
-    if (typewriterTimer) {
-        clearInterval(typewriterTimer);
-        typewriterTimer = null;
+    if (typewriterInterval) {
+        clearInterval(typewriterInterval);
+        typewriterInterval = null;
     }
     isPlaying = false;
     modalVinyl?.classList.remove('playing');
     waveformPill?.classList.remove('playing');
 }
 
-// ---------- Barrel‑like lyric display ----------
+// ---------- Old‑style letter‑by‑letter typewriter ----------
 function onTimeUpdate() {
     if (!audioElement || !lyricsData || !currentAudioKey) return;
     const albumLyrics = lyricsData[currentAudioKey];
     if (!albumLyrics || !albumLyrics.lines) return;
 
-    const currentTime = audioElement.currentTime;
     const lines = albumLyrics.lines;
-
+    const currentTime = audioElement.currentTime;
     let activeIndex = -1;
     for (let i = 0; i < lines.length; i++) {
         if (currentTime >= lines[i].time) activeIndex = i;
     }
+    if (activeIndex === -1 || activeIndex === lastActiveIndex) return;
 
+    // New line → cancel any ongoing typing
+    if (typewriterInterval) {
+        clearInterval(typewriterInterval);
+        typewriterInterval = null;
+    }
+
+    lastActiveIndex = activeIndex;
+    const fullText = lines[activeIndex].text;
     const lyricReel = document.getElementById('lyricReel');
     if (!lyricReel) return;
 
-    const prevActive = parseInt(lyricReel.dataset.activeIndex, 10) || -1;
-    if (activeIndex === prevActive) return;       // same line, no change
-
-    // ---------- 1. Outgoing line: slide‑up clone ----------
-    if (prevActive !== -1) {
-        const outgoingText = lyricReel.textContent;   // current text (could be partially typed)
-        const outgoing = document.createElement('span');
-        outgoing.className = 'lyric-reel-outgoing';
-        outgoing.textContent = outgoingText;
-        lyricReel.appendChild(outgoing);
-        // The clone automatically animates out (see CSS)
-        setTimeout(() => {
-            if (outgoing && outgoing.parentNode) outgoing.remove();
-        }, 500);
-    }
-
-    // ---------- 2. Cancel any ongoing typing ----------
-    if (typewriterTimer) {
-        clearInterval(typewriterTimer);
-        typewriterTimer = null;
-    }
-
-    // ---------- 3. Start typewriter for the new line ----------
-    const newLine = lines[activeIndex] ? lines[activeIndex].text : '♫';
-    lyricReel.textContent = '';          // clear completely
-    lyricReel.dataset.activeIndex = activeIndex;
-
+    lyricReel.textContent = '';
     let charIndex = 0;
-    typewriterTimer = setInterval(() => {
-        if (charIndex < newLine.length) {
-            lyricReel.textContent += newLine[charIndex];
+
+    typewriterInterval = setInterval(() => {
+        if (charIndex < fullText.length) {
+            lyricReel.textContent += fullText[charIndex];
             charIndex++;
         } else {
-            clearInterval(typewriterTimer);
-            typewriterTimer = null;
+            clearInterval(typewriterInterval);
+            typewriterInterval = null;
         }
-    }, 20);   // typing speed: ~40ms per character
+    }, CHARACTER_DELAY);
 }
 
 function playSnippet(key) {
@@ -211,37 +194,37 @@ function playSnippet(key) {
         const reel = document.createElement('div');
         reel.id = 'lyricReel';
         reel.className = 'lyric-reel';
-        reel.dataset.activeIndex = '-1';
-        // Start completely empty – the first line will type in
         reel.textContent = '';
         modalLyrics.appendChild(reel);
     }
-    // Inside playSnippet, after creating the lyric reel:
+
+    // Now Playing banner
     if (nowPlayingEl) {
-        nowPlayingEl.textContent = 'Now Playing: ' + (SONG_TITLES[key] || key);
-        // Delay the class add to let the modal book open animation finish
-        setTimeout(() => {
-            nowPlayingEl.classList.add('active');
-        }, 700);
+        nowPlayingEl.textContent = '🎵 Now Playing: ' + (SONG_TITLES[key] || key);
+        setTimeout(() => nowPlayingEl.classList.add('active'), 700);
     }
 
+    // Vinyl / waveform playing state
+    audioElement.addEventListener('play', () => {
+        modalVinyl.classList.add('playing');
+        waveformPill.classList.add('playing');
+    });
+    audioElement.addEventListener('pause', () => {
+        modalVinyl.classList.remove('playing');
+        waveformPill.classList.remove('playing');
+    });
+    audioElement.addEventListener('ended', () => {
+        modalVinyl.classList.remove('playing');
+        waveformPill.classList.remove('playing');
+    });
 
     audioElement.addEventListener('loadedmetadata', () => {
-        // Always start from 0 (no snippet offset)
         audioElement.currentTime = 0;
+        lastActiveIndex = -1;       // reset for new song
         audioElement.play().catch(err => { console.warn('Playback failed', err); stopAudio(); });
     });
 
-    audioElement.addEventListener('play', () => {
-        isPlaying = true;
-        modalVinyl.classList.add('playing');
-        waveformPill.classList.add('playing');
-        audioElement.addEventListener('timeupdate', onTimeUpdate);
-        // ❌ Remove the 30‑second snippet limit
-        // playTimeout = setTimeout(() => stopAudio(), MUSIC_SNIPPET_DURATION * 1000);
-    });
-
-    audioElement.addEventListener('ended', stopAudio);
+    audioElement.addEventListener('timeupdate', onTimeUpdate);
     audioElement.addEventListener('error', () => {
         console.warn('Audio error', src);
         stopAudio();
@@ -249,11 +232,31 @@ function playSnippet(key) {
 }
 
 function togglePlayback() {
-    if (isPlaying) {
-        stopAudio();
-    } else if (currentAudioKey) {
-        playSnippet(currentAudioKey);
+    if (!audioElement) return;
+    if (audioElement.paused) {
+        audioElement.play().catch(err => console.warn('Resume failed', err));
+    } else {
+        audioElement.pause();
     }
+}
+
+// ---------- Modal floating petals ----------
+function spawnModalPetals() {
+    if (!modalPetalContainer) return;
+    modalPetalContainer.innerHTML = '';
+    for (let i = 0; i < 8; i++) {
+        const petal = document.createElement('div');
+        petal.className = 'modal-falling-petal';
+        petal.style.left = Math.random() * 90 + '%';
+        petal.style.animationDuration = (Math.random() * 4 + 5) + 's';
+        petal.style.animationDelay = Math.random() * 3 + 's';
+        petal.innerHTML = '<svg viewBox="0 0 28 60"><use href="#spider-lily-petal"/></svg>';
+        modalPetalContainer.appendChild(petal);
+    }
+}
+
+function clearModalPetals() {
+    if (modalPetalContainer) modalPetalContainer.innerHTML = '';
 }
 
 // ---------- Ambient fireflies ----------
@@ -286,6 +289,7 @@ function openModal(albumKey) {
     modalOverlay.classList.add('active');
     modalBook.classList.add('active');
     createAmbient();
+    spawnModalPetals();          // petals over the cover
     playSnippet(albumKey);
 }
 
@@ -294,7 +298,7 @@ function closeModal() {
     modalOverlay.classList.remove('active');
     modalBook.classList.remove('active');
     removeAmbient();
-    // Hide the now‑playing banner
+    clearModalPetals();
     if (nowPlayingEl) {
         nowPlayingEl.classList.remove('active');
         nowPlayingEl.textContent = '';
