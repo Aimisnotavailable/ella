@@ -10,28 +10,37 @@ const AUDIO_FILES = {
     midnights: 'audio/midnights.mp3',
     speaknow: 'audio/speaknow.mp3',
     '1989': 'audio/1989.mp3',
+    TTPD : 'audio/ttpd.mp3',
+    '3114' : 'audio/3114.mp3'
 };
 
+const BASE_IMG_PATH = 'assets/imgs/'
+
 const ALBUM_COVERS = {
-    lover: 'https://placehold.co/300x300/F4B8C1/5C2D35?text=Lover',
-    folklore: 'https://placehold.co/300x300/7A9A7E/FDFBF7?text=folklore',
-    fearless: 'https://placehold.co/300x300/E6C27A/4A3820?text=Fearless',
-    red: 'https://placehold.co/300x300/C41E3A/fff?text=Red',
-    evermore: 'https://placehold.co/300x300/A0785C/fff?text=evermore',
-    midnights: 'https://placehold.co/300x300/3C4A6B/fff?text=Midnights',
-    speaknow: 'https://placehold.co/300x300/B8A0C9/3D2C4A?text=Speak+Now',
-    '1989': 'https://placehold.co/300x300/7BA4C7/fff?text=1989',
+    lover: BASE_IMG_PATH + 'lv.png',
+    folklore: BASE_IMG_PATH + 'fl.png',
+    fearless: BASE_IMG_PATH + 'frl.png',
+    red: BASE_IMG_PATH + 'rd.png',
+    evermore: BASE_IMG_PATH + 'evm.png',
+    midnights: BASE_IMG_PATH + 'mn.png',
+    speaknow: BASE_IMG_PATH + 'skn.png',
+    '1989': BASE_IMG_PATH + '19.png',
+    TTPD : BASE_IMG_PATH + 'ttpd.png',
+    '3114' : BASE_IMG_PATH + '3114.png',
 };
+
 
 const SONG_TITLES = {
     lover: 'Lover',
     folklore: 'cardigan',
     fearless: 'Love Story',
-    red: 'All Too Well (10 Minute Version)',
+    red: 'All Too Well',
     evermore: 'willow',
     midnights: 'Anti-Hero',
     speaknow: 'Mine',
-    '1989': 'Shake It Off',
+    '1989': 'Blank Space',
+    TTPD : 'The Prophecy',
+    '3114' : 'You Belong With Me',
 };
 
 // ---------- DOM references ----------
@@ -200,7 +209,7 @@ function playSnippet(key) {
 
     // Now Playing banner
     if (nowPlayingEl) {
-        nowPlayingEl.textContent = '🎵 Now Playing: ' + (SONG_TITLES[key] || key);
+        nowPlayingEl.textContent = 'Now Playing: ' + (SONG_TITLES[key] || key);
         setTimeout(() => nowPlayingEl.classList.add('active'), 700);
     }
 
