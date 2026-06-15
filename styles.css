@@ -68,25 +68,66 @@ h1,h2,h3,h4 { font-family: 'Playfair Display', serif; font-weight: 600; }
     overflow:hidden; padding:2rem; z-index:1;
 }
 .hero__petal-container { position:absolute; inset:0; pointer-events:none; z-index:2; }
-.falling-petal {
-    position:absolute; top:-60px; animation: petalFall linear infinite; opacity:0.7; will-change:transform;
+
+/* ===== CSS PETAL (hero & modal) ===== */
+.falling-petal,
+.modal-falling-petal {
+    position: absolute;
+    top: -30px;
+    opacity: 0.85;
+    will-change: transform;
+    width: 12px;
+    height: 28px;
+    background: var(--crimson);
+    border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+    box-shadow: inset 0 -4px 6px rgba(0,0,0,0.2);
 }
-.falling-petal svg { width:26px; height:auto; }
+.falling-petal::after,
+.modal-falling-petal::after {
+    content: '';
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 1.2px;
+    height: 10px;
+    background: var(--crimson-dark);
+    border-radius: 1px;
+}
+.falling-petal:nth-child(odd) { background: #D32F2F; }
+.falling-petal:nth-child(3n) { background: #B71C1C; }
+.modal-falling-petal {
+    width: 10px;
+    height: 22px;
+    top: -20px;
+    animation: modalPetalFall linear infinite;
+}
+.modal-falling-petal:nth-child(even) { background: #E8A0A8; }
+.modal-falling-petal:nth-child(3n) { background: #C41E3A; }
+
 @keyframes petalFall {
-    0% { transform:translateY(-60px) rotate(0deg) translateX(0px); opacity:0.85; }
-    25% { transform:translateY(22vh) rotate(90deg) translateX(35px); opacity:0.75; }
-    50% { transform:translateY(48vh) rotate(200deg) translateX(-25px); opacity:0.6; }
-    75% { transform:translateY(72vh) rotate(310deg) translateX(30px); opacity:0.4; }
-    100% { transform:translateY(105vh) rotate(400deg) translateX(-15px); opacity:0; }
+    0%   { transform: translateY(-60px) rotate(0deg) translateX(0px); opacity:0.85; }
+    25%  { transform: translateY(22vh) rotate(90deg) translateX(35px); opacity:0.75; }
+    50%  { transform: translateY(48vh) rotate(200deg) translateX(-25px); opacity:0.6; }
+    75%  { transform: translateY(72vh) rotate(310deg) translateX(30px); opacity:0.4; }
+    100% { transform: translateY(105vh) rotate(400deg) translateX(-15px); opacity:0; }
 }
 @keyframes petalFallAlt {
-    0% { transform:translateY(-60px) rotate(0deg) translateX(0px); opacity:0.8; }
-    20% { transform:translateY(18vh) rotate(-80deg) translateX(-40px); opacity:0.8; }
-    40% { transform:translateY(40vh) rotate(-170deg) translateX(30px); opacity:0.65; }
-    60% { transform:translateY(60vh) rotate(-260deg) translateX(-35px); opacity:0.5; }
-    80% { transform:translateY(82vh) rotate(-340deg) translateX(20px); opacity:0.25; }
-    100% { transform:translateY(105vh) rotate(-420deg) translateX(-10px); opacity:0; }
+    0%   { transform: translateY(-60px) rotate(0deg) translateX(0px); opacity:0.8; }
+    20%  { transform: translateY(18vh) rotate(-80deg) translateX(-40px); opacity:0.8; }
+    40%  { transform: translateY(40vh) rotate(-170deg) translateX(30px); opacity:0.65; }
+    60%  { transform: translateY(60vh) rotate(-260deg) translateX(-35px); opacity:0.5; }
+    80%  { transform: translateY(82vh) rotate(-340deg) translateX(20px); opacity:0.25; }
+    100% { transform: translateY(105vh) rotate(-420deg) translateX(-10px); opacity:0; }
 }
+@keyframes modalPetalFall {
+    0%   { transform: translateY(0px) rotate(0deg) translateX(0px); opacity:0.9; }
+    25%  { transform: translateY(70px) rotate(75deg) translateX(15px); opacity:0.75; }
+    50%  { transform: translateY(140px) rotate(160deg) translateX(-10px); opacity:0.6; }
+    75%  { transform: translateY(210px) rotate(250deg) translateX(15px); opacity:0.3; }
+    100% { transform: translateY(310px) rotate(360deg) translateX(-5px); opacity:0; }
+}
+
 .hero__lily { position:absolute; z-index:3; pointer-events:none; opacity:0.55; }
 .hero__lily--left { bottom:8%; left:6%; width:90px; height:200px; }
 .hero__lily--right { bottom:10%; right:5%; width:80px; height:180px; }
@@ -164,7 +205,7 @@ h1,h2,h3,h4 { font-family: 'Playfair Display', serif; font-weight: 600; }
     color: var(--text-medium);
 }
 
-/* ---------- Modal Overlay (blurred) ---------- */
+/* ---------- Modal Overlay ---------- */
 .modal-overlay {
     position: fixed; inset:0; background: rgba(0,0,0,0.35);
     backdrop-filter: blur(8px);
@@ -174,7 +215,7 @@ h1,h2,h3,h4 { font-family: 'Playfair Display', serif; font-weight: 600; }
 }
 .modal-overlay.active { opacity:1; pointer-events:auto; }
 
-/* ---------- Modal Book (opening animation) ---------- */
+/* ---------- Modal Book ---------- */
 .modal-book {
     position: fixed; top:50%; left:50%;
     transform: translate(-50%, -50%) scale(0.15);
@@ -187,13 +228,29 @@ h1,h2,h3,h4 { font-family: 'Playfair Display', serif; font-weight: 600; }
     pointer-events: none;
     overflow: hidden;
     display: flex; flex-direction: column;
-    animation: none;
 }
+
+/* ---------- Active state – book open animation ---------- */
 .modal-book.active {
-    animation: bookOpen 0.9s cubic-bezier(0.25, 0.8, 0.25, 1.2) forwards;
     opacity: 1;
     pointer-events: auto;
-    border-radius: 12px;
+    animation: bookOpen 0.9s cubic-bezier(0.25, 0.8, 0.25, 1.2) forwards;
+}
+
+/* ---------- Playing effects layered on top ---------- */
+.modal-book.active.playing {
+    animation:
+        bookOpen 0.9s cubic-bezier(0.25, 0.8, 0.25, 1.2) forwards,
+        gradientShift 12s ease infinite,
+        softGlow 3s ease-in-out infinite;
+}
+
+/* Intensified glow after 8s */
+.modal-book.intense {
+    box-shadow: 0 0 50px rgba(196,30,58,0.4), 0 0 70px rgba(230,194,122,0.5);
+}
+.modal-book.super-intense {
+    box-shadow: 0 0 80px rgba(196,30,58,0.6), 0 0 100px rgba(230,194,122,0.7);
 }
 
 @keyframes bookOpen {
@@ -219,7 +276,19 @@ h1,h2,h3,h4 { font-family: 'Playfair Display', serif; font-weight: 600; }
     }
 }
 
-/* Inner content delayed appearance */
+@keyframes gradientShift {
+    0%   { background-position: 0% 0%; }
+    25%  { background-position: 100% 0%; }
+    50%  { background-position: 100% 100%; }
+    75%  { background-position: 0% 100%; }
+    100% { background-position: 0% 0%; }
+}
+@keyframes softGlow {
+    0%, 100% { box-shadow: 0 20px 60px rgba(196,30,58,0.15), 0 0 30px rgba(230,194,122,0.2); }
+    50%      { box-shadow: 0 20px 60px rgba(196,30,58,0.3), 0 0 45px rgba(230,194,122,0.4); }
+}
+
+/* Inner content fades in */
 .modal-book .modal-content,
 .modal-book .modal-player,
 .modal-book .modal-vines {
@@ -240,12 +309,22 @@ h1,h2,h3,h4 { font-family: 'Playfair Display', serif; font-weight: 600; }
 .modal-book.active .modal-close { opacity: 1; }
 .modal-close:hover { color: var(--crimson); }
 
-/* Vines & lily */
+/* ---------- Vines & lilies (reworked) ---------- */
 .modal-vines { position: absolute; inset:0; pointer-events: none; }
-.modal-vines-svg { width:100%; height:100%; opacity: 0.5; }
+.modal-vines-svg { width:100%; height:100%; opacity: 0.6; }
+/* Left lily added */
 .modal-lily {
-    position: absolute; top:-30px; right:-20px; width:80px; height:auto; z-index:3;
+    position: absolute; top:-25px; right:-15px; width:70px; height:auto; z-index:3;
     filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+}
+.modal-lily--left {
+    left: -15px; right: auto; top: -25px;
+    transform: scaleX(-1); /* mirror */
+}
+/* Sway for both */
+.modal-lily.swaying-lily,
+.modal-lily--left.swaying-lily {
+    animation: gentleSway 4s ease-in-out infinite;
 }
 
 /* ---------- Modal Content Layout ---------- */
@@ -261,7 +340,7 @@ h1,h2,h3,h4 { font-family: 'Playfair Display', serif; font-weight: 600; }
 .modal-page { flex:1; padding: 1rem; }
 .modal-page--left { display: flex; align-items: center; justify-content: center; }
 
-/* ---------- Album Cover Animations (breathing + floating + shimmer) ---------- */
+/* ---------- Album Cover (with slow zoom when playing) ---------- */
 .modal-album-cover {
     position: relative;
     display: inline-block;
@@ -278,6 +357,14 @@ h1,h2,h3,h4 { font-family: 'Playfair Display', serif; font-weight: 600; }
     animation: albumBreathe 4s ease-in-out infinite;
     position: relative;
     z-index: 1;
+}
+/* When music is playing, slow zoom-in */
+.modal-book.playing .modal-album-cover .modal-album-img {
+    animation: albumBreathe 4s ease-in-out infinite, albumZoom 20s ease-in-out infinite;
+}
+@keyframes albumZoom {
+    0%, 100% { transform: scale(1); }
+    50%      { transform: scale(1.06); }
 }
 .modal-album-cover::after {
     content: '';
@@ -297,7 +384,6 @@ h1,h2,h3,h4 { font-family: 'Playfair Display', serif; font-weight: 600; }
     animation: shimmerSweep 3s linear infinite;
     pointer-events: none;
 }
-
 @keyframes albumFloat {
     0%, 100% { transform: translateY(0) rotate(0deg); }
     25%      { transform: translateY(-3px) rotate(0.2deg); }
@@ -324,12 +410,8 @@ h1,h2,h3,h4 { font-family: 'Playfair Display', serif; font-weight: 600; }
     transition: opacity 0.5s ease, transform 0.5s ease;
     letter-spacing: 0.3px;
 }
-.now-playing.active {
-    opacity: 1;
-    transform: translateY(0);
-}
+.now-playing.active { opacity: 1; transform: translateY(0); }
 
-/* Right page centers the lyric reel */
 .modal-page--right {
     display: flex;
     flex-direction: column;
@@ -339,7 +421,7 @@ h1,h2,h3,h4 { font-family: 'Playfair Display', serif; font-weight: 600; }
     overflow: hidden;
 }
 
-/* ---------- Lyric Reel (time‑based typewriter) ---------- */
+/* ---------- Lyric Reel (with soft pulsing shadow) ---------- */
 #lyricReel {
     position: relative;
     width: 100%;
@@ -351,6 +433,14 @@ h1,h2,h3,h4 { font-family: 'Playfair Display', serif; font-weight: 600; }
     color: var(--text-dark);
     white-space: normal;
     word-break: break-word;
+    transition: text-shadow 0.5s;
+}
+.modal-book.playing #lyricReel {
+    animation: lyricGlow 2s ease-in-out infinite;
+}
+@keyframes lyricGlow {
+    0%, 100% { text-shadow: 0 0 5px rgba(196,30,58,0.2); }
+    50%      { text-shadow: 0 0 12px rgba(196,30,58,0.5); }
 }
 
 /* ---------- Player area ---------- */
@@ -365,33 +455,13 @@ h1,h2,h3,h4 { font-family: 'Playfair Display', serif; font-weight: 600; }
 .modal-vinyl.playing .vinyl-record-svg { animation: spinRecord 2s linear infinite; }
 @keyframes spinRecord { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
 
-/* ---------- Modal Falling Petals ---------- */
+/* ---------- Modal Petal Container ---------- */
 .modal-petal-container {
     position: absolute;
     inset: 0;
     pointer-events: none;
     z-index: 5;
     overflow: hidden;
-}
-
-.modal-falling-petal {
-    position: absolute;
-    top: -30px;
-    animation: modalPetalFall linear infinite;
-    opacity: 0.7;
-    will-change: transform;
-}
-.modal-falling-petal svg {
-    width: 20px;
-    height: auto;
-}
-
-@keyframes modalPetalFall {
-    0%   { transform: translateY(0px) rotate(0deg) translateX(0px); opacity: 0.9; }
-    25%  { transform: translateY(70px) rotate(75deg) translateX(15px); opacity: 0.75; }
-    50%  { transform: translateY(140px) rotate(160deg) translateX(-10px); opacity: 0.6; }
-    75%  { transform: translateY(210px) rotate(250deg) translateX(15px); opacity: 0.3; }
-    100% { transform: translateY(310px) rotate(360deg) translateX(-5px); opacity: 0; }
 }
 
 .waveform-pill {
@@ -431,7 +501,7 @@ h1,h2,h3,h4 { font-family: 'Playfair Display', serif; font-weight: 600; }
     100% { transform: translate(5px, -35px) scale(1); opacity: 0.4; }
 }
 
-/* ---------- Swaying lilies ---------- */
+/* ---------- Swaying lilies (generic) ---------- */
 .swaying-lily {
     animation: gentleSway 4s ease-in-out infinite;
     transform-origin: bottom center;

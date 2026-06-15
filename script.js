@@ -1,5 +1,5 @@
-const FRIEND_NAME = 'Alice';
-const CHARACTER_DELAY = 40;      // typing speed in ms (lower = faster)
+const FRIEND_NAME = 'Ella';
+const CHARACTER_DELAY = 40;
 
 const AUDIO_FILES = {
     lover: 'audio/lover.mp3',
@@ -28,7 +28,6 @@ const ALBUM_COVERS = {
     TTPD : BASE_IMG_PATH + 'ttpd.png',
     '3114' : BASE_IMG_PATH + '3114.png',
 };
-
 
 const SONG_TITLES = {
     lover: 'Lover',
@@ -66,15 +65,16 @@ document.querySelectorAll('#friendName, #footerFriendName').forEach(el => el.tex
 document.getElementById('gateText').textContent = `🌸 For you, ${FRIEND_NAME}`;
 document.getElementById('heroBirthday').textContent = `Happy Birthday, ${FRIEND_NAME}! May your garden always bloom. 🌸`;
 
-// ---------- Falling petals in hero ----------
-for (let i = 0; i < 22; i++) {
+// ---------- Falling petals in hero (pure CSS petals, reduced count) ----------
+const HERO_PETAL_COUNT = 14;
+for (let i = 0; i < HERO_PETAL_COUNT; i++) {
     const petal = document.createElement('div');
     petal.className = 'falling-petal';
     petal.style.left = Math.random() * 94 + '%';
     petal.style.animationDuration = (Math.random() * 6 + 7) + 's';
     petal.style.animationDelay = (Math.random() * 8) + 's';
     petal.style.animationName = Math.random() > 0.5 ? 'petalFall' : 'petalFallAlt';
-    petal.innerHTML = '<svg viewBox="0 0 28 60" class="swaying-lily"><use href="#spider-lily-petal"/></svg>';
+    petal.style.transform = `rotate(${Math.random() * 360}deg) scale(${0.7 + Math.random()*0.6})`;
     petalContainer.appendChild(petal);
 }
 
@@ -114,20 +114,21 @@ Object.keys(AUDIO_FILES).forEach(key => {
     albumCardsContainer.appendChild(card);
 });
 
-// ---------- Audio & lyrics sync ----------
+// ---------- Audio & lyrics ----------
 let audioElement = null;
 let currentAudioKey = null;
-let isPlaying = false;
 let lyricsData = null;
 let typewriterInterval = null;
 let lastActiveIndex = -1;
+let fireflyTimer = null;
+let intensityTimers = [];
 
 async function fetchLyrics() {
     try {
         const resp = await fetch('lyrics.json');
         lyricsData = await resp.json();
     } catch (err) {
-        console.warn('lyrics.json not loaded, lyric sync disabled', err);
+        console.warn('lyrics.json not loaded', err);
         lyricsData = {};
     }
 }
@@ -144,12 +145,15 @@ function stopAudio() {
         clearInterval(typewriterInterval);
         typewriterInterval = null;
     }
-    isPlaying = false;
     modalVinyl?.classList.remove('playing');
     waveformPill?.classList.remove('playing');
+    modalBook?.classList.remove('playing', 'intense', 'super-intense');
+    // clear firefly intensifying timers
+    if (fireflyTimer) { clearInterval(fireflyTimer); fireflyTimer = null; }
+    intensityTimers.forEach(t => clearTimeout(t));
+    intensityTimers = [];
 }
 
-// ---------- Old‑style letter‑by‑letter typewriter ----------
 function onTimeUpdate() {
     if (!audioElement || !lyricsData || !currentAudioKey) return;
     const albumLyrics = lyricsData[currentAudioKey];
@@ -163,7 +167,6 @@ function onTimeUpdate() {
     }
     if (activeIndex === -1 || activeIndex === lastActiveIndex) return;
 
-    // New line → cancel any ongoing typing
     if (typewriterInterval) {
         clearInterval(typewriterInterval);
         typewriterInterval = null;
@@ -176,7 +179,6 @@ function onTimeUpdate() {
 
     lyricReel.textContent = '';
     let charIndex = 0;
-
     typewriterInterval = setInterval(() => {
         if (charIndex < fullText.length) {
             lyricReel.textContent += fullText[charIndex];
@@ -188,6 +190,36 @@ function onTimeUpdate() {
     }, CHARACTER_DELAY);
 }
 
+// ---------- Progressive animations while playing ----------
+function startProgressEffects() {
+    // After 8s: more intense glow + faster firefly multiplication
+    const t1 = setTimeout(() => {
+        modalBook?.classList.add('intense');
+    }, 8000);
+    // After 16s: super intense
+    const t2 = setTimeout(() => {
+        modalBook?.classList.add('super-intense');
+    }, 16000);
+    intensityTimers.push(t1, t2);
+
+    // Every 3 seconds spawn extra fireflies (up to a max of 30)
+    let extraFireflies = 0;
+    fireflyTimer = setInterval(() => {
+        if (extraFireflies >= 18) { clearInterval(fireflyTimer); fireflyTimer = null; return; }
+        const firefly = document.createElement('div');
+        firefly.className = 'ambient-firefly';
+        firefly.style.left = Math.random() * 90 + '%';
+        firefly.style.top = Math.random() * 90 + '%';
+        firefly.style.animationDelay = '0s';
+        firefly.style.animationDuration = 3 + Math.random() * 4 + 's';
+        firefly.style.width = (8 + Math.random() * 10) + 'px';
+        firefly.style.height = firefly.style.width;
+        document.body.appendChild(firefly);
+        ambientElements.push(firefly);
+        extraFireflies++;
+    }, 3000);
+}
+
 function playSnippet(key) {
     stopAudio();
     currentAudioKey = key;
@@ -197,7 +229,6 @@ function playSnippet(key) {
     audioElement = new Audio(src);
     audioElement.preload = 'auto';
 
-    // ---------- Prepare lyric reel ----------
     if (modalLyrics) {
         modalLyrics.innerHTML = '';
         const reel = document.createElement('div');
@@ -207,29 +238,39 @@ function playSnippet(key) {
         modalLyrics.appendChild(reel);
     }
 
-    // Now Playing banner
     if (nowPlayingEl) {
         nowPlayingEl.textContent = 'Now Playing: ' + (SONG_TITLES[key] || key);
         setTimeout(() => nowPlayingEl.classList.add('active'), 700);
     }
 
-    // Vinyl / waveform playing state
     audioElement.addEventListener('play', () => {
         modalVinyl.classList.add('playing');
         waveformPill.classList.add('playing');
+        modalBook.classList.add('playing');
+        startProgressEffects();      // launch the progression
     });
     audioElement.addEventListener('pause', () => {
         modalVinyl.classList.remove('playing');
         waveformPill.classList.remove('playing');
+        modalBook.classList.remove('playing', 'intense', 'super-intense');
+        clearInterval(fireflyTimer);
+        fireflyTimer = null;
+        intensityTimers.forEach(t => clearTimeout(t));
+        intensityTimers = [];
     });
     audioElement.addEventListener('ended', () => {
         modalVinyl.classList.remove('playing');
         waveformPill.classList.remove('playing');
+        modalBook.classList.remove('playing', 'intense', 'super-intense');
+        clearInterval(fireflyTimer);
+        fireflyTimer = null;
+        intensityTimers.forEach(t => clearTimeout(t));
+        intensityTimers = [];
     });
 
     audioElement.addEventListener('loadedmetadata', () => {
         audioElement.currentTime = 0;
-        lastActiveIndex = -1;       // reset for new song
+        lastActiveIndex = -1;
         audioElement.play().catch(err => { console.warn('Playback failed', err); stopAudio(); });
     });
 
@@ -249,17 +290,18 @@ function togglePlayback() {
     }
 }
 
-// ---------- Modal floating petals ----------
+// ---------- Modal falling petals (fewer, scaled) ----------
 function spawnModalPetals() {
     if (!modalPetalContainer) return;
     modalPetalContainer.innerHTML = '';
-    for (let i = 0; i < 8; i++) {
+    const count = window.innerWidth < 600 ? 6 : 8;
+    for (let i = 0; i < count; i++) {
         const petal = document.createElement('div');
         petal.className = 'modal-falling-petal';
         petal.style.left = Math.random() * 90 + '%';
-        petal.style.animationDuration = (Math.random() * 4 + 5) + 's';
+        petal.style.animationDuration = (Math.random() * 4 + 3) + 's';
         petal.style.animationDelay = Math.random() * 3 + 's';
-        petal.innerHTML = '<svg viewBox="0 0 28 60"><use href="#spider-lily-petal"/></svg>';
+        petal.style.transform = `rotate(${Math.random()*360}deg) scale(${0.6 + Math.random()*0.6})`;
         modalPetalContainer.appendChild(petal);
     }
 }
@@ -268,12 +310,12 @@ function clearModalPetals() {
     if (modalPetalContainer) modalPetalContainer.innerHTML = '';
 }
 
-// ---------- Ambient fireflies ----------
+// ---------- Ambient fireflies (initial set) ----------
 let ambientElements = [];
 
 function createAmbient() {
     removeAmbient();
-    for (let i = 0; i < 12; i++) {
+    for (let i = 0; i < 10; i++) {
         const firefly = document.createElement('div');
         firefly.className = 'ambient-firefly';
         firefly.style.left = Math.random() * 90 + '%';
@@ -298,7 +340,7 @@ function openModal(albumKey) {
     modalOverlay.classList.add('active');
     modalBook.classList.add('active');
     createAmbient();
-    spawnModalPetals();          // petals over the cover
+    // spawnModalPetals();
     playSnippet(albumKey);
 }
 
@@ -314,7 +356,6 @@ function closeModal() {
     }
 }
 
-// Album card clicks
 document.querySelectorAll('.album-card').forEach(card => {
     card.addEventListener('click', () => {
         const album = card.dataset.album;
