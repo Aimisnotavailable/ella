@@ -35,7 +35,7 @@ const SONG_TITLES = {
 };
 
 // ---------- DOM references ----------
-const petalContainer = document.getElementById('modalPetalContainer');
+const petalContainer = document.getElementById('petalContainer');
 const gateOverlay = document.getElementById('gateOverlay');
 const heroBirthday = document.getElementById('heroBirthday');
 const heroLilyLeft = document.getElementById('heroLilyLeft');
@@ -65,7 +65,7 @@ for (let i = 0; i < 22; i++) {
     petal.style.animationDuration = (Math.random() * 6 + 7) + 's';
     petal.style.animationDelay = (Math.random() * 8) + 's';
     petal.style.animationName = Math.random() > 0.5 ? 'petalFall' : 'petalFallAlt';
-    petal.innerHTML = '<svg viewBox="0 0 28 60"><use href="#spider-lily-petal"/></svg>';
+    petal.innerHTML = '<svg viewBox="0 0 28 60" class="swaying-lily"><use href="#spider-lily-petal"/></svg>';
     petalContainer.appendChild(petal);
 }
 
