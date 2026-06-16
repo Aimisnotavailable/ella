@@ -63,7 +63,7 @@ const modalPetalContainer = document.getElementById('modalPetalContainer');
 // ---------- Name placeholders ----------
 document.querySelectorAll('#friendName, #footerFriendName').forEach(el => el.textContent = FRIEND_NAME);
 document.getElementById('gateText').textContent = `🌸 For you, ${FRIEND_NAME}`;
-document.getElementById('heroBirthday').textContent = `Happy Birthday, ${FRIEND_NAME}! May your garden always bloom. 🌸`;
+document.getElementById('heroBirthday').textContent = `Scroll down for the actual surprise`;
 
 // ---------- Falling petals in hero (pure CSS petals, reduced count) ----------
 const HERO_PETAL_COUNT = 14;
