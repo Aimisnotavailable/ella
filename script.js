@@ -61,7 +61,7 @@ const nowPlayingEl = document.getElementById('nowPlaying');
 const modalPetalContainer = document.getElementById('modalPetalContainer');
 
 // ---------- Name placeholders ----------
-document.querySelectorAll('#friendName, #footerFriendName').forEach(el => el.textContent = FRIEND_NAME);
+// document.querySelectorAll('#friendName, #footerFriendName').forEach(el => el.textContent = FRIEND_NAME);
 document.getElementById('gateText').textContent = `🌸 For you, ${FRIEND_NAME}`;
 document.getElementById('heroBirthday').textContent = `Scroll down for the actual surprise`;
 
